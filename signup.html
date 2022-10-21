@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up to tripapp</title>
+</head>
+<body>
+    <div class="splash" id="splash" style="display:block;position: absolute;top: 50%;left: 50%;transform: translate(-50%, -50%);font-size: 50px;">
+        <!--- Design is required -->
+        Splash Screen
+        <img src="" alt="">
+    </div>
+    <form class="form" id="form" style= "display: none;position: absolute;top: 50%;left: 50%;transform: translate(-50%, -50%);">
+        <input type="text" class="name" name="name" id="name" placeholder="Your name" required > 
+        <input type="text" class="surname" name="surname" id="surname" placeholder="Your surname" required >
+        <input type="email" class="email" name="email" id="email" placeholder="Your email" required>
+        <input type="password" class="password" name="password" id="password" placeholder="Your password" required onkeyup="passwordLongCheck();passwordMatchCheck()"> 
+        <input type="password" class="passwordAgain"name="passwordAgain" id="passwordAgain" placeholder="Your password again" required onkeyup="passwordMatchCheck()"> 
+        <!-- Sign up button does not redirect to page to profile page because it is not designed yet.-->    
+        <input type="submit" class="submit" name="submit" id="submit" value="Sign up">
+        <span>Already have an account?</span>
+        <a href="login.html">Log in</a>
+        <span style="display: none;color: red;" id="notMatchError">Passwords do not match!</span>
+        <span style="display: none;color: red;" id="notLongError">Password must be at least 8 characters long!</span>
+    </form>
+    <script src = "signup.js"></script>
+</body>
+</html>
