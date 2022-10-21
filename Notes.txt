@@ -1,3 +1,3 @@
 Commit "login and signup pages are created" details
 Sign up page is created. But it is not fully completed. Splash screen timeout is set to 0 to make implementation easier. After implementation end, it must be rearranged. Also, sign up button does not redirect page because profile page is not designed yet.
-Splash screen is not added to log in page yet. Forgot password option is not valid yet because how to handle that situation is not clear.
+Forgot password" option is not valid yet because how to handle that situation is not clear.
