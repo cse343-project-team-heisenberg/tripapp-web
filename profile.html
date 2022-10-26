@@ -20,6 +20,22 @@
         <button id="logout" class="logout"><a href="login.html" style="text-decoration: none;">Log out</a></button>
     </nav>
     <main class="main" id="main">
+        <section class="profile_section" id="profile_section">
+            <img class="profile_pic" id="profile_pic" src="icons/profile.ico" alt="Default profile picture">
+            <section class="biography" id="biography"> 
+                <text class="name" id="name">Name</text>
+                <text class="surname" id="surname">Surname</text> <br>
+                <textarea class="bio" name="bio" id="bio" cols="30" rows="5" placeholder="Biography..." disabled></textarea>
+            </section>
+            <section class="bio_buttons" id="bio_buttons"> 
+                <li><button class="edit_button" id="edit_button">Edit Profile</button></li>
+                <li><button class="save_button" id="save_button" hidden>Save</button></li>
+            </section>
+        </section>
+        <section class="posts_section" id="posts_section">
+            <text style="font-size: 50px;position: absolute;top: 50%;left: 50%;transform: translate(-50%, -50%);">POSTS SECTION</text>
+        </section>
     </main>
+    <script src="profile.js"></script>
 </body>
 </html>
