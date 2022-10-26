@@ -7,36 +7,91 @@
 }
 .list-text{
     font-size: 25px;
+    font-family: Arial, Helvetica, sans-serif;
 }
 .list-link{
     text-decoration: none;
-    color: #1c4aff
+    color: black
+}
+.list{
+    list-style: none;
+    padding: 0;
+    position: absolute;
+}
+.logout{
+    position: absolute;
+    bottom: 0%;
+    left: 0%;
+    border-radius: 20px;
+    height: 30px;
+    width: 100%;
+}
+.profile_pic{
+    position: absolute;
+    top: 15%;
+    left: 5%;
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    border: 1px solid black;
+}
+.biography{
+    position: absolute;
+    top: 15%;
+    left: 20%;
+}
+.bio{
+    position: absolute;
+    resize: none;
+}
+.bio_buttons{
+    position: absolute;
+    top: 15%;
+    left: 50%;
+    list-style: none;
+    border-radius: 10px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 25px;
 }
 .sidebar{
-    background-color: #caebf9;
-    position: fixed;
+    position: absolute;
+    background-color: white;
     top: 0;
     left: 0;
     width: 20%;
     height: 100%;
 }
 .main{
-    background-color: #BBBBBB;
-    position: fixed;
+    position: absolute;
+    background-color: white;
     top: 0;
     left: 20%;
     width: 80%;
+    min-height: 100%;
+    overflow: auto;
+    border-left: 1px solid black;
+    box-sizing: border-box;
+
+}
+.profile_section{
+    position: absolute;
+    top: 0%;
+    left: 0%;
+    width: 100%;
+    height: 30%;
+    background-color: white;
+}
+.posts_section{
+    position: absolute;
+    left: 0%;
+    top: 30%;
+    width: 100%;
+    height: 70%;
+    background-color: white;
+    border-top: 1px solid black;
+    box-sizing: border-box;
+}
+body{
     height: 100%;
-}
-.list{
-    list-style: none;
-    padding: 0;
-    position: fixed;
-}
-.logout{
-    position: fixed;
-    bottom: 0%;
-    border-radius: 20px;
-    height: 30px;
-    width:inherit;
+    width: 100%;
 }
