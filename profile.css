@@ -1,0 +1,42 @@
+.list-element{
+    margin-bottom: 20px;
+}
+.list-image{
+    height: 30px;
+    vertical-align: bottom;
+}
+.list-text{
+    font-size: 25px;
+}
+.list-link{
+    text-decoration: none;
+    color: #1c4aff
+}
+.sidebar{
+    background-color: #caebf9;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 20%;
+    height: 100%;
+}
+.main{
+    background-color: #BBBBBB;
+    position: fixed;
+    top: 0;
+    left: 20%;
+    width: 80%;
+    height: 100%;
+}
+.list{
+    list-style: none;
+    padding: 0;
+    position: fixed;
+}
+.logout{
+    position: fixed;
+    bottom: 0%;
+    border-radius: 20px;
+    height: 30px;
+    width:inherit;
+}
