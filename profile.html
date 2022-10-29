@@ -33,7 +33,14 @@
             </section>
         </section>
         <section class="posts_section" id="posts_section">
-            <text style="font-size: 50px;position: absolute;top: 50%;left: 50%;transform: translate(-50%, -50%);">POSTS SECTION</text>
+            <div class="post_design" id="post_design">
+                <label for="post_photo"><img class="post_photo_display" id="post_photo_display" src="icons/add-photo.ico"></label>
+                <input type="file" class="post_photo" id="post_photo" accept="image/*" hidden>
+                <textarea class="post_text" id="post_text"></textarea>
+                <button id="post_it" class="post_it">Post it</button>
+            </div>
+            <ul id="posts" class="posts">
+            </ul>
         </section>
     </main>
     <script src="profile.js"></script>
