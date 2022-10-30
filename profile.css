@@ -26,37 +26,26 @@
     height: 30px;
     width: 100%;
 }
-.profile_pic{
-    position: absolute;
-    top: 15%;
-    left: 5%;
-    width: 150px;
-    height: 150px;
-    border-radius: 50%;
-    border: 1px solid black;
+.profile_table{
+    width: 800px;
+    height: 100%;
 }
-.biography{
-    position: absolute;
-    top: 15%;
-    left: 20%;
+.profile_pic{
+    max-width: 200px;
+    max-height: 200px;
+    border-radius: 50%;
 }
 .bio{
-    position: absolute;
     resize: none;
 }
-.bio_buttons{
-    position: absolute;
-    top: 15%;
-    left: 50%;
-    list-style: none;
+.bio_button{
     border-radius: 10px;
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: 25px;
+    margin-top: 10px;
+    width: 100px;
 }
 .posts{
     list-style: none;
 }
-
 .sidebar{
     position: absolute;
     background-color: white;
@@ -79,10 +68,8 @@
 }
 .post_design{
     position: relative;
-    width: 600px;
-    height: 200px;
-    border: 2px solid black;
-    border-radius: 15px;
+    max-width: 600px;
+    max-height: 200px;
     margin-top: 10px;
     margin-left: 10px;
 }
@@ -94,20 +81,12 @@
 }
 .post_text{
     width: 400px;
-    height: 150px;
-    border: 2px solid black;
+    min-height: 150px;
     box-sizing: border-box;
+    border-radius: 20px;
     margin-top: 10px;
     margin-left: 10px;
-    resize: none;
-}
-.post_text_v2{
-    width: 550px;
-    height: 150px;
-    border: 2px solid black;
-    box-sizing: border-box;
-    margin-top: 10px;
-    margin-left: 10px;
+    overflow: auto;
     resize: none;
 }
 .profile_section{
