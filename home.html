@@ -4,41 +4,22 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profile | TRIPAPP</title>
-    <link rel="stylesheet" href="profile.css">
+    <title>Home | TRIPAPP</title>
+    <link rel="stylesheet" href="home.css">
 </head>
 <body>
     <nav class="sidebar" id="sidebar">
         <ul class="list" id="list">
-            <li id="home" class="list-element"><a href="home.html" class="list-link"><img src="icons/home.ico" alt="Home icon" class="list-image"><text class="list-text"> Home</text></a></li>
+            <li id="home" class="list-element"><a href="#" class="list-link"><img src="icons/home.ico" alt="Home icon" class="list-image"><text class="list-text"> Home</text></a></li>
             <li id="explore" class="list-element"><a href="#" class="list-link"><img src="icons/explore.ico" alt="Explore icon" class="list-image"><text class="list-text"> Explore</text></a></li>
             <li id="map" class="list-element"><a href="#" class="list-link"><img src="icons/map.ico" alt="Map icon" class="list-image"><text class="list-text"> Map</text></a></li> 
             <li id="notifications" class="list-element"><a href="#" class="list-link"><img src="icons/notifications.ico" alt="Notifications icon" class="list-image"><text class="list-text"> Notifications</text></a></li>
             <li id="messages" class="list-element"><a href="#" class="list-link"><img src="icons/messages.ico" alt="Messages icon" class="list-image"><text class="list-text"> Messages</text></a></li>
-            <li id="profile" class="list-element"><a href="#" class="list-link"><img src="icons/profile.ico" alt="Profile icon" class="list-image"><text class="list-text"> Profile</text></a></li>
+            <li id="profile" class="list-element"><a href="profile.html" class="list-link"><img src="icons/profile.ico" alt="Profile icon" class="list-image"><text class="list-text"> Profile</text></a></li>
         </ul>
         <button id="logout" class="logout"><a href="login.html" style="text-decoration: none;">Log out</a></button>
     </nav>
     <main class="main" id="main">
-        <section class="profile_section" id="profile_section">
-            <table class="profile_table" id="profile_table">
-                <tr>
-                    <td style="width:200px;text-align: center;">
-                        <img class="profile_pic" id="profile_pic" src="icons/profile.ico" alt="Default profile picture">
-                        <label style="display: block;border:2px solid black;border-radius: 10px;" for="profile_pic_download">Change Profile Picture</label>
-                        <input type="file" class="profile_pic_download" id="profile_pic_download" accept="image/*" hidden>
-                    </td>
-                    <td style="width:150px;text-align: center;">
-                        <text class="nameSurname" id="nameSurname" style="display:block">Name Surname</text>
-                        <textarea class="bio" name="bio" id="bio" cols="30" rows="5" placeholder="Biography..." disabled></textarea>
-                    </td> 
-                    <td style="width:100px;text-align: center;">
-                        <button class="bio_button" id="edit_button">Edit Profile</button>
-                        <button class="bio_button" id="save_button" hidden>Save</button>
-                    </td>                
-                </tr>
-            </table>
-        </section>
         <section class="posts_section" id="posts_section">
             <div class="post_design" id="post_design">
                 <label for="post_photo"><img class="post_photo_display" id="post_photo_display" src="icons/add-photo.ico"></label>
@@ -50,6 +31,6 @@
             </ul>
         </section>
     </main>
-    <script src="profile.js"></script>
+    <script src="home.js"></script>
 </body>
 </html>

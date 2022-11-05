@@ -26,23 +26,6 @@
     height: 30px;
     width: 100%;
 }
-.profile_table{
-    width: 800px;
-    height: 100%;
-}
-.profile_pic{
-    max-width: 200px;
-    max-height: 200px;
-    border-radius: 50%;
-}
-.bio{
-    resize: none;
-}
-.bio_button{
-    border-radius: 10px;
-    margin-top: 10px;
-    width: 100px;
-}
 .posts{
     list-style: none;
 }
@@ -91,14 +74,11 @@
     resize: none;
 }
 
-.profile_section{
-    position: absolute;
-    top: 0%;
-    left: 0%;
-    width: 100%;
-    height: 30%;
-    background-color: white;
+.post_details{
+    width:400px;
+    height: 50px;
 }
+
 .post_photo_select{
     height: 30px;
     width: 30px;
@@ -111,18 +91,13 @@
     margin-bottom: 5px;
     border-radius: 15px;
 }
-.post_details{
-    width:400px;
-    height: 50px;
-}
 .posts_section{
     position: absolute;
     left: 0%;
-    top: 30%;
+    top: 0%;
     width: 100%;
-    height: 70%;
+    height: 100%;
     background-color: white;
-    border-top: 1px solid black;
     box-sizing: border-box;
 }
 body{

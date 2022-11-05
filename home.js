@@ -1,23 +1,3 @@
-document.getElementById("edit_button").addEventListener("click", function(){
-    document.querySelector(".bio").disabled = false;
-    document.getElementById("save_button").hidden = false;
-})
-
-document.getElementById("save_button").addEventListener("click", function(){
-    document.querySelector(".bio").disabled = true;
-    document.getElementById("save_button").hidden = true;
-    /*Content of the bio must be added to the database. */
-})
-
-document.getElementById('profile_pic_download').addEventListener("change", function(){
-    var read = new FileReader();
-    read.readAsDataURL(document.getElementById('profile_pic_download').files[0]);
-    read.onload = function(){
-        document.getElementById('profile_pic').src = read.result;
-        /*Profile picture must be added to the database. */
-    }
-})
-
 document.getElementById('post_it').addEventListener("click", function(){
     var date = new Date();
     var post = document.createElement('li');
