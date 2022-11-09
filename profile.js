@@ -19,38 +19,49 @@ document.getElementById('profile_pic_download').addEventListener("change", funct
 })
 
 document.getElementById('post_it').addEventListener("click", function(){
-    var date = new Date();
-    var post = document.createElement('li');
-    var post_photo = document.createElement('img');
-    var post_text = document.createElement('textarea');
-    var post_details = document.createElement('section');
-    var post_date = document.createElement('text');
-    post_date.textContent = date.toLocaleString('en-US');
-    post_date.style = "position: absolute;";
+    if(document.getElementById('post_text').value == "" && document.getElementById('post_photo_display').src == "add-photo.ico")
+        return;    
+
+    var post = document.createElement("li");
+    var photo = document.createElement("img");
+    var text = document.createElement('section');
+    var profile_pic = document.createElement('img');
+    var username = document.createElement('text');
     var read = new FileReader();
-    post_text.textContent = document.getElementById('post_text').value;
-    /*This text content must be also added to the database.*/
-    post.className = "post_design";
+
+    post.style.cssText = "position: relative; width: 550px;max-height: 800px; display: block;border-radius: 15px;border: 3px solid black";
+    text.style.cssText = "font-size: 20px; font-family: Arial, Helvetica, sans-serif; width: 500px;overflow-wrap: normal; margin-left: 50px";
+    profile_pic.style.cssText = "border-radius: 50%;width: 50px;height: 50px;";
+    username.style.cssText = " width: 500px;height: 25px;font-size: 25px; vertical-align: top; ";
+
+    profile_pic.src = document.getElementById('profile_pic').src;
+    username.textContent = document.getElementById('username').textContent;
+    text.textContent = document.getElementById('post_text').value;
+    // add this to database. //
+
+    post.appendChild(profile_pic);
+    post.appendChild(username);
+    post.appendChild(text);
+
     if(document.getElementById('post_photo').files[0] != undefined){
         read.readAsDataURL(document.getElementById('post_photo').files[0]);
         read.onload = function(){
-            post_photo.src = read.result;
-            /* This result must be also added to the database. */
+            photo.src = read.result;
+            // add this to database. //
         }
-        post_photo.className = "post_photo_display";
-        post.appendChild(post_photo);
+        photo.style.cssText = "position: relative;width: 500px; margin-left: 50px; border-radius: 15px;";
+        post.appendChild(photo);
     }
-    post_text.className = "post_text";
-    post_details.className = "post_details";
-    post_text.disabled = true;
-    post.appendChild(post_text);
-    post_details.appendChild(post_date);
-    post.appendChild(post_details);
+
+    document.getElementById('posts').prepend(post);
     document.getElementById('posts').prepend(post);
     document.getElementById('post_text').value = null;
     document.getElementById('post_photo_display').src = "icons/add-photo.ico";
     document.getElementById('post_photo').value = null;
 })
+
+
+
 document.getElementById('post_photo').addEventListener("change", function(){
     var read = new FileReader();
     read.readAsDataURL(document.getElementById('post_photo').files[0]);
