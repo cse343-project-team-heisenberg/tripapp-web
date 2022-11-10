@@ -79,10 +79,10 @@
 }
 .post_design{
     position: relative;
-    max-width: 90%;
-    max-height: 200px;
-    border-right: 2px solid black;
-    border-bottom: 2px solid black;
+    width: 600px;
+    max-height: max-content;
+    display: block;
+    margin-bottom: 50px;
 }
 .post_photo_display{
     width: 150px;
@@ -116,10 +116,9 @@
 }
 .post_it{
     position: absolute;
-    bottom: 0px;
-    right: 0px;
-    margin-right: 20px;
-    margin-bottom: 5px;
+    right: 20px;
+    bottom: -20px;
+    width: 100px;
     border-radius: 15px;
 }
 .post_details{
