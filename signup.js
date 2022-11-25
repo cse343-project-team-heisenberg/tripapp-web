@@ -1,3 +1,7 @@
+import { auth, db} from "/firebase_config.js"
+import { createUserWithEmailAndPassword, sendEmailVerification} from "https://www.gstatic.com/firebasejs/9.12.0/firebase-auth.js"
+import { collection, addDoc } from "https://www.gstatic.com/firebasejs/9.12.0/firebase-firestore.js";
+
 var passwordMatch = false;
 var passwordLong = false;
 
@@ -11,7 +15,6 @@ function passwordMatchCheck(){
         document.getElementById("notMatchError").style.display = "block";
         passwordMatch = false;
     }
-    enableLogin();
 }
 
 /* Checks whether password is long enough. */
@@ -24,23 +27,48 @@ function passwordLongCheck(){
         document.getElementById("notLongError").style.display = "block";
         passwordLong = false;
     }
-    enableLogin();
 }
 
-/* Activate or deactivate submit button according to passwords match and are long enough. */
-function enableLogin(){
-    if(passwordMatch == true && passwordLong == true){
-        document.querySelector(".submit").disabled = false;
-    }
-    else{
-        document.querySelector(".submit").disabled = true;
-    }
-}
+/* Register the user to the system. */
+document.getElementById('signup').addEventListener("click", function(){
+    passwordMatchCheck();
+    passwordLongCheck();
+    document.getElementById("emailUsedError").style.display = "none";
+    if(passwordLong == false || passwordMatch == false)
+        return;
+    
+    var email =  document.getElementById("email").value;
+    var password = document.getElementById("password").value;
+
+    createUserWithEmailAndPassword(auth,email,password).then((userCredential) =>{
+        const user = userCredential.user;   
+        
+        var name = document.getElementById("name").value;
+        var surname = document.getElementById("surname").value;
+        
+        const docRef = addDoc(collection(db, "users"), {
+            uid: user.uid,
+            name: name,
+            surname: surname,
+            followers: 0,
+            follows: 0,
+            post: 0
+        });
+    })
+    
+    .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        document.getElementById("emailUsedError").style.display = "block";
+        
+    })
+
+});
 
 /* Timeout will be arranged after the implementation is finished. */
 setTimeout(function(){
     document.getElementById("splash").style.display = "none";  
     document.getElementById("form").style.display = "block";
-}, 0); 
+}, 500); 
 
     

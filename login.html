@@ -5,22 +5,24 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Log In | TRIPAPP</title>
+    <link rel="stylesheet" href="login.css">
 </head>
 <body>
-    <div class="splash" id="splash" style="display:block;position: absolute;top: 50%;left: 50%;transform: translate(-50%, -50%);font-size: 50px;">
+    <div class="splash" id="splash">
         <!--- Design is required -->
         Splash Screen
         <img src="" alt="">
     </div>
-    <form class="form" id="form" style= "display: none;position: absolute;top: 50%;left: 50%;transform: translate(-50%, -50%);">
+    <form class="form" id="form">
+        <h1>LOG IN</h1>
         <input type="email" class="email" name="email" id="email" placeholder="Your email" required> 
-        <input type="password" class="password" name="password" id="password" placeholder="Your password" required> 
-        <input type="submit" class="submit" name="submit" value="Log in"> 
-        <span>Don't have an account?</span>
-        <a href="signup.html">Sign up</a> 
+        <input type="password" id="password" placeholder="Your password" required> 
+        <button type="button" class="login" id="login">Log In</button> 
+        <span>Don't have an account? <a href="signup.html">Sign up</a></span>
         <!--- Forgot password does not redirect page to another page because it is not set yet.-->
         <a href="#">Forgot Password</a>
+        <span style="display: none;color: red;" id="authenticationError">Wrong password or email!</span>
     </form>
-    <script src = "login.js"></script>
+    <script type="module" src = "login.js"></script>
 </body>
 </html>
