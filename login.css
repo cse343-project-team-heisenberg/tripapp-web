@@ -1,0 +1,47 @@
+.splash{
+    display:block;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 50px;
+}
+.form{
+    display: none;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 600px;
+    min-height: 400px;
+    max-height: max-content;
+    border: 5px solid black;
+    border-radius: 20px;
+    text-align: center;
+    background-color: aliceblue;
+}
+form input{
+    width: 92%;
+    height: 50px;
+    border: 1px solid white;
+    border-radius: 20px;
+    background-color: hwb(0 99% 1% / 0.611);
+    margin-top: 2%;
+    font-size: 30px;
+}
+form span{
+    font-size: 30px;
+    display: block;
+}
+form a{
+    font-size: 30px;
+    color: blue;
+    text-decoration: none;
+}
+.login{
+    margin-top: 2%;
+    height: 100px;
+    width: 90%;
+    border-radius: 20px;
+    font-size: 30px;
+}
