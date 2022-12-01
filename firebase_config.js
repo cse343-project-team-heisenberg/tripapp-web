@@ -3,6 +3,7 @@ import {getAuth} from "https://www.gstatic.com/firebasejs/9.12.0/firebase-auth.j
 // Import th e functions you need from the SDKs you need
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.12.0/firebase-app.js"
 import {getFirestore} from "https://www.gstatic.com/firebasejs/9.12.0/firebase-firestore.js"
+import { getStorage } from "https://www.gstatic.com/firebasejs/9.12.0/firebase-storage.js";
 
 
 // TODO: Add SDKs for Firebase products that you want to use
@@ -19,6 +20,7 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-const app = initializeApp(firebaseConfig);
+export const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 export const db = getFirestore(app);
+export const storage = getStorage(app);
