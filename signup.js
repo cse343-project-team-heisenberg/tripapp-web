@@ -1,6 +1,6 @@
 import { auth, db} from "/firebase_config.js"
 import { createUserWithEmailAndPassword, sendEmailVerification} from "https://www.gstatic.com/firebasejs/9.12.0/firebase-auth.js"
-import { collection, addDoc } from "https://www.gstatic.com/firebasejs/9.12.0/firebase-firestore.js";
+import { collection, addDoc,doc, setDoc} from "https://www.gstatic.com/firebasejs/9.12.0/firebase-firestore.js";
 
 var passwordMatch = false;
 var passwordLong = false;
@@ -39,14 +39,18 @@ document.getElementById('signup').addEventListener("click", function(){
     
     var email =  document.getElementById("email").value;
     var password = document.getElementById("password").value;
+  
 
-    createUserWithEmailAndPassword(auth,email,password).then((userCredential) =>{
+        
+    createUserWithEmailAndPassword(auth,email,password).then(async (userCredential) =>{
         const user = userCredential.user;   
         
         var name = document.getElementById("name").value;
         var surname = document.getElementById("surname").value;
-        
-        const docRef = addDoc(collection(db, "users"), {
+
+        sendEmailVerification(auth.currentUser).then(() =>{});
+           
+        await await setDoc(doc(db, "users", user.uid), {
             uid: user.uid,
             name: name,
             surname: surname,
@@ -54,6 +58,9 @@ document.getElementById('signup').addEventListener("click", function(){
             follows: 0,
             post: 0
         });
+
+        self.location = "login.html";
+
     })
     
     .catch((error) => {
