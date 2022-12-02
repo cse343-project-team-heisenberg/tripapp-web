@@ -2,9 +2,9 @@ import { doc, getDoc, updateDoc, arrayUnion} from "https://www.gstatic.com/fireb
 import { db, storage} from "/firebase_config.js"
 import { ref, uploadBytes, getDownloadURL} from "https://www.gstatic.com/firebasejs/9.12.0/firebase-storage.js";
 
+const uid = localStorage.getItem("user id");
 
-const uid = new URLSearchParams(window.location.search).get("uid");
-
+console.log(uid);
 const docRef = doc(db, "users", uid);
 var docSnap = await getDoc(docRef);
 if (docSnap.exists()) {
@@ -21,7 +21,7 @@ if (docSnap.exists()) {
     }
 } 
 else {
-  console.log("No such document!");
+console.log("No such document!");
 }
 
 
@@ -40,13 +40,14 @@ document.getElementById('profile_pic_download').addEventListener("change", funct
     var read = new FileReader();
     var file = document.getElementById('profile_pic_download').files[0];
     const storageRef = ref(storage, "web/" + uid);
-    const uploadTask = uploadBytes(storageRef, file);
+    const uploadTask = uploadBytes(storageRef, file).then(function(snapshot){
 
-    getDownloadURL(storageRef).then(async (url)=>{
-        docSnap = await updateDoc(docRef, {
-            profile_pic_url: url
+        getDownloadURL(storageRef).then(async (url)=>{
+            docSnap = await updateDoc(docRef, {
+                profile_pic_url: url
+            })
         })
-    })
+    });
 
     read.readAsDataURL(document.getElementById('profile_pic_download').files[0]);
     read.onload = function(){

@@ -1,11 +1,12 @@
 import {signInWithEmailAndPassword} from "https://www.gstatic.com/firebasejs/9.12.0/firebase-auth.js"
-import {auth} from "./firebase_config.js"
+import {auth, storage} from "./firebase_config.js"
 
 /* Timeout will be arranged after the implementation is finished. */
 setTimeout(function(){
     document.getElementById("splash").style.display = "none";  
     document.getElementById("form").style.display = "block";
 }, 500); 
+
 
 document.getElementById("login").addEventListener("click", function(){ 
 
@@ -17,7 +18,9 @@ document.getElementById("login").addEventListener("click", function(){
 
         const user = userCredential.user;
 
-        self.location = "profile.html?uid=" + user.uid;
+        localStorage.setItem("user id", user.uid);
+
+        self.location = "profile.html";
 
     })
 
