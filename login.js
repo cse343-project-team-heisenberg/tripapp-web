@@ -20,7 +20,7 @@ document.getElementById("login").addEventListener("click", function(){
 
         localStorage.setItem("user id", user.uid);
 
-        self.location = "profile.html";
+        self.location = "myprofile.html";
 
     })
 

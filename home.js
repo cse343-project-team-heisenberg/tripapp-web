@@ -12,22 +12,60 @@ if (docSnap.exists()) {
     if(docSnap.data().profile_pic_url != undefined){
         profile_pic_src = docSnap.data().profile_pic_url;
     }
+    for(var i = 0; i < docSnap.data().follows.length; i++){
+        const docRefothers = doc(db, "users", docSnap.data().follows[i].uid);
+        var docSnapothers = await getDoc(docRefothers);
+        if(docSnapothers.exists()){
+            username = docSnapothers.data().name + " " + docSnapothers.data().surname;
+            profile_pic_src = docSnapothers.data().profile_pic_url;
+            for(var j = 0; j < docSnapothers.data().posts.length; j++){
+                createPost(username, profile_pic_src, docSnapothers.data().posts[j].post_text, docSnapothers.data().posts[j].post_picture, docSnap.data().follows[i].uid);
+            }
+        }
+    }
+
+    for(var i = 0; i < docSnap.data().posts.length; i++){
+        createPost(docSnap.data().name + docSnap.data().surname, docSnap.data().profile_pic_url, docSnap.data().posts[i].post_text, docSnap.data().posts[i].post_picture, docSnap.data().uid);
+
+    }
 } 
 else {
   console.log("No such document!");
 }
 
-const querySnapshot = await getDocs(collection(db, "users"));
 
-querySnapshot.forEach((doc) => {
-  if(doc.data().posts != undefined){
-    var username_content = doc.data().name + " " + doc.data().surname;
-    var profile_pic_src = doc.data().profile_pic_url;
-    for(var i = 0; i < doc.data().posts.length; i++){
-        createPost(username_content, profile_pic_src, doc.data().posts[i].post_text, doc.data().posts[i].post_picture);
+document.getElementById("search_button").addEventListener("click", async function(){
+    const querySnapshot = await getDocs(collection(db, "users"));
+
+    querySnapshot.forEach((doc) => {
+    if(doc.data().posts != undefined){
+        var username_content = doc.data().name + " " + doc.data().surname;
+        var profile_pic_src = doc.data().profile_pic_url;
+        if(username_content === document.getElementById("search_key").value){
+            createUser(username_content, profile_pic_src, doc.data().uid);
+        }
     }
+    });
+})
+
+function createUser(username_content, profile_pic_src, uid){
+    var user = document.createElement("li");
+    var link = document.createElement("a");
+    var profile_pic = document.createElement("img");
+    var username = document.createElement("text");
+
+    user.style.cssText = "width: 80%; height: 10%; display: block; border: 1px solid black; border-radius: 20px";
+    profile_pic.style.cssText = "border-radius: 50%; width: 30px; height: 30px";
+    username.style.cssText = " width: 30px;height: 25px;font-size: 25px; vertical-align: top; "
+    link.style.cssText = "text-decoration: none; color: black";
+    link.href = "profile.html?uid=" + uid;
+    username.textContent = username_content;
+    profile_pic.src = profile_pic_src;
+    link.appendChild(profile_pic)
+    link.appendChild(username);
+    user.appendChild(link);
+    document.getElementById('users').prepend(user);
 }
-});
 
 document.getElementById('post_it').addEventListener("click", async function(){
     var textContent = document.getElementById('post_text').value;
@@ -70,7 +108,7 @@ document.getElementById('post_it').addEventListener("click", async function(){
 })
 
 
-function createPost(username_content, profile_pic_src, textContent, photo_src){
+function createPost(username_content, profile_pic_src, textContent, photo_src, uid_of_user){
     if(textContent == "" && photo_src == undefined){
         return;
     }
@@ -99,6 +137,10 @@ function createPost(username_content, profile_pic_src, textContent, photo_src){
         post.appendChild(photo);
     }
     document.getElementById('posts').prepend(post);
+
+    profile_pic.addEventListener("click", function(){
+        self.location = "profile.html?uid=" + uid_of_user;
+    });
 }
 
 

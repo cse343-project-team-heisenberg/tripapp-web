@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Profile | TRIPAPP</title>
-    <link rel="stylesheet" href="profile.css">
+    <link rel="stylesheet" href="myprofile.css">
 </head>
 <body style="min-height: 100%; overflow: auto">
     <nav class="sidebar" id="sidebar">
@@ -20,8 +20,8 @@
     </nav>
     <main class="main" id="main">
         <section class="profile_section" id="profile_section">
-            <img class="profile_pic" id="profile_pic" src="icons/profile.ico" alt="Default profile picture">
-            <button class="follow" id="follow">Follow</button>
+            <label for="profile_pic_donwload"><img class="profile_pic" id="profile_pic" src="icons/profile.ico" alt="Default profile picture"></label>
+            <input type="file" class="profile_pic_download" id="profile_pic_download" accept="image/*" hidden>
             <hr>
             <text class="username" id="username" style="display:block">Name Surname</text>
             <textarea id="bio" class="bio" style="display:block"></textarea>
@@ -31,6 +31,12 @@
             <text>Follows</text>
         </section>
         <section class="posts_section" id="posts_section">
+            <div class="post_design" id="post_design">
+                <label for="post_photo"><img class="post_photo_display" id="post_photo_display" src="icons/add-photo.ico"></label>
+                <input type="file" class="post_photo" id="post_photo" accept="image/*" hidden>
+                <textarea class="post_text" id="post_text" placeholder="Say something..."></textarea>
+                <button id="post_it" class="post_it">Post it</button>
+            </div>
             <ul id="posts" class="posts">
             </ul>
         </section>
@@ -41,6 +47,6 @@
         <ul id="users" class="users">
         </ul>
     </nav>
-    <script type="module" src="profile.js"></script>
+    <script type="module" src="myprofile.js"></script>
 </body>
 </html>

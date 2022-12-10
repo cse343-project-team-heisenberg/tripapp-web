@@ -1,15 +1,8 @@
-import { doc, getDoc, updateDoc, arrayUnion, arrayRemove, getDocs, collection} from "https://www.gstatic.com/firebasejs/9.12.0/firebase-firestore.js";
+import { doc, getDoc, updateDoc, arrayUnion, getDocs, collection} from "https://www.gstatic.com/firebasejs/9.12.0/firebase-firestore.js";
 import { db, storage} from "/firebase_config.js"
 import { ref, uploadBytes, getDownloadURL} from "https://www.gstatic.com/firebasejs/9.12.0/firebase-storage.js";
 
-const uid = new URLSearchParams(window.location.search).get("uid");
-
-if(uid == localStorage.getItem("user id")){
-    self.location = "myprofile.html";
-}
-
-const docRef2 = doc(db, "users", localStorage.getItem("user id"));
-var docSnap2 = await getDoc(docRef2);
+const uid = localStorage.getItem("user id");
 
 const docRef = doc(db, "users", uid);
 var docSnap = await getDoc(docRef);
@@ -18,6 +11,9 @@ if (docSnap.exists()) {
     if(docSnap.data().profile_pic_url != undefined){
         document.getElementById('profile_pic').src = docSnap.data().profile_pic_url;
     }
+    if(docSnap.data().followers != undefined){
+        document.getElementById("followers_number").textContent = docSnap.data().followers.length;
+    }
     if(docSnap.data().posts != undefined){
         var username_content = document.getElementById('username').textContent;
         var profile_pic_src = document.getElementById('profile_pic').src;
@@ -25,60 +21,13 @@ if (docSnap.exists()) {
             createPost(username_content, profile_pic_src, docSnap.data().posts[i].post_text, docSnap.data().posts[i].post_picture);
         }
     }
-    if(docSnap.data().followers != undefined){
-        document.getElementById("followers_number").textContent = docSnap.data().followers.length;
-        for(var i = 0; i < docSnap.data().followers.length; i++){
-            if(docSnap.data().followers[i].uid == localStorage.getItem("user id")){
-                document.getElementById('follow').textContent = "Following";
-                document.getElementById('follow').style.backgroundColor = "green";
-            }
-        }
-    }
     if(docSnap.data().follows != undefined){
         document.getElementById("follows_number").textContent = docSnap.data().follows.length;
     }
-
 } 
 else {
 console.log("No such document!");
 }
-
-document.getElementById('follow').addEventListener("click", async function(){
-    if(document.getElementById('follow').textContent == "Follow"){
-        document.getElementById('follow').textContent = "Following";
-        document.getElementById('follow').style.backgroundColor = "green";
-        document.getElementById('followers_number').textContent = parseInt(document.getElementById('followers_number').textContent) + 1 + " Followers";
-        docSnap = await updateDoc(docRef, {
-            followers: arrayUnion({
-                uid : localStorage.getItem("user id")
-            })
-        })
-
-        docSnap2 = await updateDoc(docRef2, {
-            follows: arrayUnion({
-                uid: uid
-            })
-        })
-
-
-    }
-    else{
-        document.getElementById('follow').textContent = "Follow";
-        document.getElementById('follow').style.backgroundColor = "black";
-        document.getElementById('followers_number').textContent = parseInt(document.getElementById('followers_number').textContent) - 1 + " Followers";
-        docSnap = await updateDoc(docRef, {
-            followers: arrayRemove({
-                uid: localStorage.getItem("user id")
-            })
-        })
-
-        docSnap2 = await updateDoc(docRef2, {
-            follows: arrayRemove({
-                uid: uid
-            })
-        })
-    }
-});
 
 document.getElementById("search_button").addEventListener("click", async function(){
     const querySnapshot = await getDocs(collection(db, "users"));
@@ -113,6 +62,26 @@ function createUser(username_content, profile_pic_src, uid){
     document.getElementById('users').prepend(user);
 }
 
+document.getElementById('profile_pic_download').addEventListener("change", function(){
+    var read = new FileReader();
+    var file = document.getElementById('profile_pic_download').files[0];
+    const storageRef = ref(storage, "web/" + uid);
+    const uploadTask = uploadBytes(storageRef, file).then(function(snapshot){
+
+        getDownloadURL(storageRef).then(async (url)=>{
+            docSnap = await updateDoc(docRef, {
+                profile_pic_url: url
+            })
+        })
+    });
+
+    read.readAsDataURL(document.getElementById('profile_pic_download').files[0]);
+    read.onload = function(){
+        document.getElementById('profile_pic').src = read.result;
+        /*Profile picture must be added to the database. */
+    }
+})
+
 function createPost(username_content, profile_pic_src, textContent, photo_src){
     if(textContent == "" && photo_src == undefined){
         return;
@@ -143,3 +112,56 @@ function createPost(username_content, profile_pic_src, textContent, photo_src){
     }
     document.getElementById('posts').prepend(post);
 }
+
+document.getElementById('post_it').addEventListener("click", async function(){ 
+    var username_content = document.getElementById('username').textContent;
+    var textContent = document.getElementById('post_text').value;
+    var profile_pic_src = document.getElementById('profile_pic').src;
+    var photo_src = null;
+    if(document.getElementById('post_photo').files[0] != undefined){
+        var read = new FileReader();
+
+        var file = document.getElementById('post_photo').files[0];
+        const storageRef = ref(storage, "web/" + file.name);
+        const uploadTask = uploadBytes(storageRef, file).then(function(snapshot){
+    
+            getDownloadURL(storageRef).then(async (url)=>{
+                docSnap = await updateDoc(docRef, {
+                    posts: arrayUnion({
+                        post_text: textContent,
+                        post_picture: url
+                    })
+                })
+            })
+        })
+
+        read.readAsDataURL(document.getElementById('post_photo').files[0]);
+        read.onload = function(){
+            photo_src = read.result;
+            createPost(username_content, profile_pic_src, textContent, photo_src);
+        }
+    }
+    else{
+        createPost(username_content, profile_pic_src, textContent, photo_src);
+        docSnap = await updateDoc(docRef, {
+            posts: arrayUnion({
+                post_text: textContent,
+                post_picture: null
+            })
+        })
+    }
+
+    document.getElementById('post_text').value = null;
+    document.getElementById('post_photo_display').src = "icons/add-photo.ico";
+    document.getElementById('post_photo').value = null;
+})
+
+
+
+document.getElementById('post_photo').addEventListener("change", function(){
+    var read = new FileReader();
+    read.readAsDataURL(document.getElementById('post_photo').files[0]);
+    read.onload = function(){
+        document.getElementById('post_photo_display').src = read.result;
+    }
+})
