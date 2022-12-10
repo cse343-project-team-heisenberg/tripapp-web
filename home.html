@@ -14,7 +14,7 @@
             <li id="explore" class="list-element"><a href="#" class="list-link"><img src="icons/explore.ico" alt="Explore icon" class="list-image"><text class="list-text"> Explore</text></a></li>
             <li id="notifications" class="list-element"><a href="#" class="list-link"><img src="icons/notifications.ico" alt="Notifications icon" class="list-image"><text class="list-text"> Notifications</text></a></li>
             <li id="messages" class="list-element"><a href="#" class="list-link"><img src="icons/messages.ico" alt="Messages icon" class="list-image"><text class="list-text"> Messages</text></a></li>
-            <li id="profile" class="list-element"><a href="profile.html" class="list-link"><img src="icons/profile.ico" alt="Profile icon" class="list-image"><text class="list-text"> Profile</text></a></li>
+            <li id="profile" class="list-element"><a href="myprofile.html" class="list-link"><img src="icons/profile.ico" alt="Profile icon" class="list-image"><text class="list-text"> Profile</text></a></li>
         </ul>
         <button id="logout" class="logout"><a href="login.html" style="text-decoration: none;">Log out</a></button>
     </nav>
@@ -31,6 +31,10 @@
         </section>
     </main>
     <nav class="leftsidebar" id="leftsidebar">
+        <input class="search_key" id="search_key" type="text" placeholder="Search">
+        <button class="search_button" id="search_button"><img src="icons/search.ico" alt="Search icon"></button>
+        <ul id="users" class="users">
+        </ul>
     </nav>
     <script type="module" src="home.js"></script>
 </body>

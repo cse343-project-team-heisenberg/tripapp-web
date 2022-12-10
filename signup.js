@@ -54,8 +54,6 @@ document.getElementById('signup').addEventListener("click", function(){
             uid: user.uid,
             name: name,
             surname: surname,
-            followers: 0,
-            follows: 0,
             post: 0
         });
 
