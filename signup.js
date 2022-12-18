@@ -1,6 +1,8 @@
-import { auth, db} from "/firebase_config.js"
+import { storage, auth, db} from "/firebase_config.js"
 import { createUserWithEmailAndPassword, sendEmailVerification} from "https://www.gstatic.com/firebasejs/9.12.0/firebase-auth.js"
-import { collection, addDoc,doc, setDoc} from "https://www.gstatic.com/firebasejs/9.12.0/firebase-firestore.js";
+import { collection, addDoc,doc, setDoc, updateDoc} from "https://www.gstatic.com/firebasejs/9.12.0/firebase-firestore.js";
+import { ref, uploadBytes, getDownloadURL} from "https://www.gstatic.com/firebasejs/9.12.0/firebase-storage.js";
+
 
 var passwordMatch = false;
 var passwordLong = false;
@@ -54,7 +56,8 @@ document.getElementById('signup').addEventListener("click", function(){
             uid: user.uid,
             name: name,
             surname: surname,
-            post: 0
+            follows: [],
+            posts: []
         });
 
         self.location = "login.html";
@@ -64,6 +67,7 @@ document.getElementById('signup').addEventListener("click", function(){
     .catch((error) => {
         const errorCode = error.code;
         const errorMessage = error.message;
+        console.log(errorMessage);
         document.getElementById("emailUsedError").style.display = "block";
         
     })
