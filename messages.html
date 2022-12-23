@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Messages | TRIPAPP</title>
+    <link rel="stylesheet" href="messages.css">
+</head>
+<body style="min-height: 100%; overflow: auto">
+    <nav class="sidebar" id="sidebar">
+        <ul class="list" id="list">
+            <li id="home" class="list-element"><a href="home.html" class="list-link"><img src="icons/home.ico" alt="Home icon" class="list-image"><text class="list-text"> Home</text></a></li>
+            <li id="explore" class="list-element"><a href="#" class="list-link"><img src="icons/explore.ico" alt="Explore icon" class="list-image"><text class="list-text"> Explore</text></a></li>
+            <li id="notifications" class="list-element"><a href="#" class="list-link"><img src="icons/notifications.ico" alt="Notifications icon" class="list-image"><text class="list-text"> Notifications</text></a></li>
+            <li id="messages" class="list-element"><a href="#" class="list-link"><img src="icons/messages.ico" alt="Messages icon" class="list-image"><text class="list-text"> Messages</text></a></li>
+            <li id="lists" class="list-element"><a href="Lists.html" class="list-link"><img src="icons/lists.ico" alt="Lists icon" class="list-image"><text class="list-text"> Lists</text></a></li>
+            <li id="profile" class="list-element"><a href="myprofile.html" class="list-link"><img src="icons/profile.ico" alt="Profile icon" class="list-image"><text class="list-text"> Profile</text></a></li>
+        </ul>
+        <button id="logout" class="logout"><a href="login.html" style="text-decoration: none;">Log out</a></button>
+    </nav>
+    <main class="main" id="main">
+        <section class="contacts_section" id="contacts_section">
+            <h1  style="text-align: center">CONTACTS</h1>
+            <hr style="border: 1px solid black">
+            <ul id="contacts" class="contacts">
+            </ul>
+        </section>
+        <section class="messages_section" id="messages_section">
+            <div id="receiver" class="receiver" style="text-align: center; border-bottom: 2px solid black" hidden>
+                
+            </div>
+            <ul id="messages_list" class="messages_list" style="list-style: none;"></ul>
+            <input class="message" id="message" type="text" placeholder="message">
+        </section>
+    </main>
+    <script type="module" src="messages.js"></script>
+</body>
+</html>
