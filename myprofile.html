@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="myprofile.css">
 </head>
 <body style="min-height: 100%; overflow: auto">
+    <img class="splash" id="splash" src="icons/splash.png" alt="splash screen">
     <nav class="sidebar" id="sidebar">
         <ul class="list" id="list">
             <li id="home" class="list-element"><a href="home.html" class="list-link"><img src="icons/home.ico" alt="Home icon" class="list-image"><text class="list-text"> Home</text></a></li>
@@ -24,13 +25,13 @@
             <label for="profile_pic_download">
             <img class="profile_pic" id="profile_pic" src="icons/profile.ico" alt="Default profile picture"></label>
             <input type="file" class="profile_pic_download" id="profile_pic_download" accept="image/*" hidden>
-            <hr>
-            <text class="username" id="username" style="display:block">Name Surname</text>
-            <textarea id="bio" class="bio" style="display:block"></textarea>
-            <b id="followers_number">0 </b>
-            <text>Followers</text>
-            <b id="follows_number"> 0 </b>
-            <text>Follows</text>
+            <text class="username" id="username" style="display:block;margin-left: 2%;">username</text>
+            <section id="social" style="position: absolute;bottom: 0; margin-left: 2%">
+                <b id="followers_number">0 </b>
+                <text>Followers</text>
+                <b id="follows_number"> 0 </b>
+                <text>Follows</text>
+            </section>
         </section>
         <section class="posts_section" id="posts_section">
             <div class="post_design" id="post_design">

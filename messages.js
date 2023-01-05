@@ -57,5 +57,3 @@ document.getElementById('message').addEventListener("keypress", function(e){
     }
 })
 
-createContacts("Çağrı Çaycı", "icons/profile.ico", 5);
-createContacts("Elon", "icons/profile.ico", 5);

@@ -8,15 +8,12 @@
     <link rel="stylesheet" href="signup.css">
 </head>
 <body style="background-color: aliceblue;">
-    <div class="splash" id="splash">
-        <!--- Design is required -->
-        Splash Screen
-        <img src="" alt="">
-    </div>
+    <img class="splash" id="splash" src="icons/splash.png" alt="splash screen">
     <form class="form" id="form">
         <h1>SIGN UP</h1>
         <input type="text" id="name" placeholder="Your name" required > 
         <input type="text" id="surname" placeholder="Your surname" required >
+        <input type="test" id="username" placeholder="Your username" required>
         <input type="email" id="email" placeholder="Your email" required>
         <input type="password" id="password" placeholder="Your password" required> 
         <input type="password" id="passwordAgain" placeholder="Your password again" required> 
@@ -27,7 +24,7 @@
         <span style="display: none;color: red;" id="notMatchError">Passwords do not match!</span>
         <span style="display: none;color: red;" id="notLongError">Password must be at least 8 characters long!</span>
         <span style="display: none;color: red;" id="emailUsedError">Email is already used!</span>
-
+        <span style="display: none;color: red;" id="usernameUsedError">Username is already used!</span>
     </form>
     <script type="module" src = "signup.js"></script>
 </body>

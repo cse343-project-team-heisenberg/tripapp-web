@@ -32,7 +32,7 @@ function passwordLongCheck(){
 }
 
 /* Register the user to the system. */
-document.getElementById('signup').addEventListener("click", function(){
+document.getElementById('signup').addEventListener("click", async function(){
     passwordMatchCheck();
     passwordLongCheck();
     document.getElementById("emailUsedError").style.display = "none";
@@ -41,37 +41,40 @@ document.getElementById('signup').addEventListener("click", function(){
     
     var email =  document.getElementById("email").value;
     var password = document.getElementById("password").value;
+    var username = document.getElementById("username").value;
   
-
-        
-    createUserWithEmailAndPassword(auth,email,password).then(async (userCredential) =>{
-        const user = userCredential.user;   
-        
-        var name = document.getElementById("name").value;
-        var surname = document.getElementById("surname").value;
-
-        sendEmailVerification(auth.currentUser).then(() =>{});
-           
-        await await setDoc(doc(db, "users", user.uid), {
-            uid: user.uid,
-            name: name,
-            surname: surname,
-            follows: [],
-            posts: []
-        });
-
-        self.location = "login.html";
-
-    })
+    sendEmailVerification(auth.currentUser).then(() =>{
+        createUserWithEmailAndPassword(auth,email,password).then(async (userCredential) =>{
+            const user = userCredential.user;   
+            
+            var name = document.getElementById("name").value;
+            var surname = document.getElementById("surname").value;
+               
+            await await setDoc(doc(db, "testWeb", user.uid), {
+                UserInfo: {
+                uuid: user.uid,
+                mail: email,
+                password: password,
+                name: name,
+                surname: surname,
+                userName: username},
+                following: {following: []},
+                followers: {followers: []},
+                data: {data: []}
+            });
     
-    .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        console.log(errorMessage);
-        document.getElementById("emailUsedError").style.display = "block";
+            self.location = "login.html";
+    
+        })
         
-    })
-
+        .catch((error) => {
+            const errorCode = error.code;
+            const errorMessage = error.message;
+            console.log(errorMessage);
+            document.getElementById("emailUsedError").style.display = "block";
+            
+        })
+    });
 });
 
 /* Timeout will be arranged after the implementation is finished. */
