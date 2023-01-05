@@ -4,35 +4,24 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profile | TRIPAPP</title>
-    <link rel="stylesheet" href="profile.css">
+    <title>Explore | TRIPAPP</title>
+    <link rel="stylesheet" href="notifications.css">
 </head>
-<body style="min-height: 100%; overflow: auto">
+<body>
     <img class="splash" id="splash" src="icons/splash.png" alt="splash screen">
     <nav class="sidebar" id="sidebar">
         <ul class="list" id="list">
             <li id="home" class="list-element"><a href="home.html" class="list-link"><img src="icons/home.ico" alt="Home icon" class="list-image"><text class="list-text"> Home</text></a></li>
             <li id="explore" class="list-element"><a href="explore.html" class="list-link"><img src="icons/explore.ico" alt="Explore icon" class="list-image"><text class="list-text"> Explore</text></a></li>
-            <li id="notifications" class="list-element"><a href="notifications.html" class="list-link"><img src="icons/notifications.ico" alt="Notifications icon" class="list-image"><text class="list-text"> Notifications</text></a></li>
+            <li id="notifications" class="list-element"><a href="#" class="list-link"><img src="icons/notifications.ico" alt="Notifications icon" class="list-image"><text class="list-text"> Notifications</text></a></li>
             <li id="lists" class="list-element"><a href="lists.html" class="list-link"><img src="icons/lists.ico" alt="Lists icon" class="list-image"><text class="list-text"> Lists</text></a></li>
             <li id="profile" class="list-element"><a href="myprofile.html" class="list-link"><img src="icons/profile.ico" alt="Profile icon" class="list-image"><text class="list-text"> Profile</text></a></li>
         </ul>
         <button id="logout" class="logout"><a href="login.html" style="text-decoration: none;">Log out</a></button>
     </nav>
     <main class="main" id="main">
-        <section class="profile_section" id="profile_section">
-            <img class="profile_pic" id="profile_pic" src="icons/profile.ico" alt="Default profile picture">
-            <button class="follow" id="follow">Follow</button>
-            <text class="username" id="username" style="display:block; margin-left: 2%">username</text>
-            <section id="social" style="position: absolute;bottom: 0; margin-left: 2%">
-                <b id="followers_number">0 </b>
-                <text>Followers</text>
-                <b id="follows_number"> 0 </b>
-                <text>Follows</text>
-            </section>
-        </section>
-        <section class="posts_section" id="posts_section">
-            <ul id="posts" class="posts">
+        <section class="notifications_section" id="notifications_section">
+            <ul id="notifications_list" class="notifications_list">
             </ul>
         </section>
     </main>
@@ -42,6 +31,6 @@
         <ul id="users" class="users">
         </ul>
     </nav>
-    <script type="module" src="profile.js"></script>
+    <script type="module" src="notifications.js"></script>
 </body>
 </html>
