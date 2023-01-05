@@ -1,29 +1,25 @@
-import { doc, getDoc, updateDoc, arrayUnion, getDocs, collection} from "https://www.gstatic.com/firebasejs/9.12.0/firebase-firestore.js";
+import { doc, getDoc, updateDoc, arrayUnion, getDocs, collection, arrayRemove} from "https://www.gstatic.com/firebasejs/9.12.0/firebase-firestore.js";
 import { db, storage} from "/firebase_config.js"
 import { ref, uploadBytes, getDownloadURL} from "https://www.gstatic.com/firebasejs/9.12.0/firebase-storage.js";
 
 
 const uid = localStorage.getItem("user id");
 
-const docRef = doc(db, "users", uid);
+const docRef = doc(db, "testWeb", uid);
 var docSnap = await getDoc(docRef);
 if (docSnap.exists()) {
-    document.getElementById("username").textContent = docSnap.data().name + " " + docSnap.data().surname;
-    if(docSnap.data().profile_pic_url != undefined)
-        document.getElementById('profile_pic').src = docSnap.data().profile_pic_url;
-    if(docSnap.data().followers != undefined){
-        document.getElementById("followers_number").textContent = docSnap.data().followers.length;
-    }
-    if(docSnap.data().posts != undefined){
+    document.getElementById("username").textContent = docSnap.data().UserInfo.userName;
+    if(docSnap.data().profilePicture != undefined)
+        document.getElementById('profile_pic').src = docSnap.data().profilePicture;
+    if(docSnap.data().data != undefined){
         var username_content = document.getElementById('username').textContent;
         var profile_pic_src = document.getElementById('profile_pic').src;
-        for(var i = 0; i < docSnap.data().posts.length; i++){
-            createPost(username_content, profile_pic_src, docSnap.data().posts[i].post_text, docSnap.data().posts[i].post_picture);
+        for(var i = 0; i < docSnap.data().data.data.length; i++){
+            createPost(username_content, profile_pic_src, docSnap.data().data.data[i].description, docSnap.data().data.data[i].pictureUrl, uid, i);
         }
     }
-    if(docSnap.data().follows != undefined){
-        document.getElementById("follows_number").textContent = docSnap.data().follows.length;
-    }
+    document.getElementById("follows_number").textContent = docSnap.data().following.following.length;
+    document.getElementById("followers_number").textContent = docSnap.data().followers.followers.length;
 } 
 else {
 console.log("No such document!");
@@ -31,17 +27,15 @@ console.log("No such document!");
 
 document.getElementById("search_button").addEventListener("click", async function(){
     document.getElementById("users").innerHTML = "";
-    const querySnapshot = await getDocs(collection(db, "users"));
+    const querySnapshot = await getDocs(collection(db, "testWeb"));
     querySnapshot.forEach((doc) => {
-    if(doc.data().posts != undefined){
-        var username_content = doc.data().name + " " + doc.data().surname;
+        var username_content = doc.data().UserInfo.userName;
         var profile_pic_src = "icons/profile.ico"
-        if(doc.data().profile_pic_url != undefined)
-            profile_pic_src = doc.data().profile_pic_url;
+        if(doc.data().profilePicture != undefined)
+            profile_pic_src = doc.data().profilePicture;
         if(username_content === document.getElementById("search_key").value){
-            createUser(username_content, profile_pic_src, doc.data().uid);
+            createUser(username_content, profile_pic_src, doc.data().UserInfo.uuid);
         }
-    }
     });
 })
 
@@ -77,7 +71,7 @@ document.getElementById('profile_pic_download').addEventListener("change", funct
 
         getDownloadURL(storageRef).then(async (url)=>{
             docSnap = await updateDoc(docRef, {
-                profile_pic_url: url
+                profilePicture: url
             })
         })
     });
@@ -90,7 +84,7 @@ document.getElementById('profile_pic_download').addEventListener("change", funct
 })
 
 
-function createPost(username_content, profile_pic_src, textContent, photo_src){
+async function createPost(username_content, profile_pic_src, textContent, photo_src, uid_of_user,  index){
     if(textContent == "" && photo_src == undefined){
         return;
     }
@@ -113,14 +107,18 @@ function createPost(username_content, profile_pic_src, textContent, photo_src){
     fav.style.cssText = "position: relative; width: 30px; height: 30px; left: 30%; vertical-align: middle";
     save.style.cssText = "position: relative; width: 30px; height: 30px; left: 60%; vertical-align: middle";
     fav_number.style.cssText = "position: relative; left: 30%; font-size: 30px; vertical-align: middle;";
+    save_number.style.cssText = "position: relative; left: 60%; font-size: 30px; vertical-align: middle;";
+
 
     username.textContent = username_content;
     profile_pic.src = profile_pic_src;
     text.textContent = textContent;
     fav.src ="icons/unfavved.ico";
-    fav.alt = "unfavved"
-    save.src = "icons/saved.ico";
+    fav.alt = "unfavved";
+    save.src = "icons/add-list.ico";
+    save.alt = "unsaved";
     fav_number.textContent = "0";
+    save_number.textContent = "0";
 
     post.appendChild(profile_pic);
     post.appendChild(username);
@@ -133,18 +131,102 @@ function createPost(username_content, profile_pic_src, textContent, photo_src){
     post.appendChild(fav);
     post.appendChild(fav_number);
     post.appendChild(save);
+    post.appendChild(save_number);
     document.getElementById('posts').prepend(post);
 
-    fav.addEventListener('click', function(){
+    const docRef = doc(db, "testWeb", uid_of_user);
+    var docSnap = await getDoc(docRef);
+    if(docSnap.data().data.data[index] != undefined){
+        post = docSnap.data().data.data[index];
+        const current = post.like.indexOf(uid);
+
+        if(current > -1){
+            fav.src = "icons/favved.ico";
+            fav.alt = "favved";
+        }       
+        
+        const current2 = post.save.indexOf(uid);
+
+        if(current2 > -1){
+            save.src = "icons/added-list.ico";
+            save.alt = "saved";
+        }
+        
+        fav_number.textContent = post.like.length;
+        save_number.textContent = post.save.length;
+    }
+
+    save.addEventListener('click', async function(){
+
+        if(save.alt == "unsaved"){
+            save.src = "icons/added-list.ico";
+            save.alt = "saved";
+            save_number.textContent = parseInt(save_number.textContent) + 1;
+            
+            const docRef = doc(db, "testWeb", uid_of_user);
+            var docSnap = await getDoc(docRef);
+            post = docSnap.data().data.data[index];
+            post.save.push(uid);
+            var docSnaps = await updateDoc(docRef, {
+                "data.data": arrayRemove(docSnap.data().data.data[index])
+            })
+            docSnaps = await updateDoc(docRef, {
+                "data.data": arrayUnion(post)
+            })
+        }
+        else{
+            save.src = "icons/add-list.ico";
+            save.alt = "unsaved";
+            save_number.textContent = parseInt(save_number.textContent) - 1;
+            const docRef = doc(db, "testWeb", uid_of_user);
+            var docSnap = await getDoc(docRef);
+            post = docSnap.data().data.data[index];
+            const remove = post.save.indexOf(uid);
+            if (remove > -1) { 
+            post.save.splice(remove, 1); 
+            }
+            var docSnaps = await updateDoc(docRef, {
+                "data.data": arrayRemove(docSnap.data().data.data[index])
+            })
+            docSnaps = await updateDoc(docRef, {
+                "data.data": arrayUnion(post)
+            })
+        }
+    })
+
+    fav.addEventListener('click', async function(){
         if(fav.alt == "unfavved"){
             fav.src = "icons/favved.ico";
             fav.alt = "favved";
             fav_number.textContent = parseInt(fav_number.textContent) + 1;
+            const docRef = doc(db, "testWeb", uid_of_user);
+            var docSnap = await getDoc(docRef);
+            post = docSnap.data().data.data[index];
+            post.like.push(uid);
+            var docSnaps = await updateDoc(docRef, {
+                "data.data": arrayRemove(docSnap.data().data.data[index])
+            })
+            docSnaps = await updateDoc(docRef, {
+                "data.data": arrayUnion(post)
+            })
         }
         else{
             fav.src = "icons/unfavved.ico";
             fav.alt = "unfavved";
             fav_number.textContent = parseInt(fav_number.textContent) - 1;
+            const docRef = doc(db, "testWeb", uid_of_user);
+            var docSnap = await getDoc(docRef);
+            post = docSnap.data().data.data[index];
+            const remove = post.like.indexOf(uid);
+            if (remove > -1) { 
+            post.like.splice(remove, 1); 
+            }
+            var docSnaps = await updateDoc(docRef, {
+                "data.data": arrayRemove(docSnap.data().data.data[index])
+            })
+            docSnaps = await updateDoc(docRef, {
+                "data.data": arrayUnion(post)
+            })
         }
     })
 }
@@ -154,6 +236,7 @@ document.getElementById('post_it').addEventListener("click", async function(){
     var textContent = document.getElementById('post_text').value;
     var profile_pic_src = document.getElementById('profile_pic').src;
     var photo_src = null;
+    var docSnaps;
     if(document.getElementById('post_photo').files[0] != undefined){
         var read = new FileReader();
 
@@ -162,10 +245,12 @@ document.getElementById('post_it').addEventListener("click", async function(){
         const uploadTask = uploadBytes(storageRef, file).then(function(snapshot){
     
             getDownloadURL(storageRef).then(async (url)=>{
-                docSnap = await updateDoc(docRef, {
-                    posts: arrayUnion({
-                        post_text: textContent,
-                        post_picture: url
+                docSnaps = await updateDoc(docRef, {
+                    "data.data": arrayUnion({
+                        description: textContent,
+                        pictureUrl: url,
+                        like: [],
+                        save: []
                     })
                 })
             })
@@ -174,25 +259,25 @@ document.getElementById('post_it').addEventListener("click", async function(){
         read.readAsDataURL(document.getElementById('post_photo').files[0]);
         read.onload = function(){
             photo_src = read.result;
-            createPost(username_content, profile_pic_src, textContent, photo_src);
+            createPost(username_content, profile_pic_src, textContent, photo_src, uid, docSnap.data().data.data.length);
         }
     }
     else{
-        createPost(username_content, profile_pic_src, textContent, photo_src);
-        docSnap = await updateDoc(docRef, {
-            posts: arrayUnion({
-                post_text: textContent,
-                post_picture: null
+        docSnaps = await updateDoc(docRef, {
+            "data.data": arrayUnion({
+                description: textContent,
+                pictureUrl: null,
+                like: [],
+                save: []
             })
         })
+        createPost(username_content, profile_pic_src, textContent, photo_src, uid, docSnap.data().data.data.length);
     }
 
     document.getElementById('post_text').value = null;
     document.getElementById('post_photo_display').src = "icons/add-photo.ico";
     document.getElementById('post_photo').value = null;
 })
-
-
 
 document.getElementById('post_photo').addEventListener("change", function(){
     var read = new FileReader();
@@ -201,3 +286,10 @@ document.getElementById('post_photo').addEventListener("change", function(){
         document.getElementById('post_photo_display').src = read.result;
     }
 })
+
+setTimeout(function(){
+    document.getElementById("splash").style.display = "none";  
+    document.getElementById("main").style.display = "block";
+    document.getElementById("sidebar").style.display = "block";
+    document.getElementById("leftsidebar").style.display = "block";
+}, 500); 

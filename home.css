@@ -30,10 +30,20 @@
     height: 30px;
     width: 100%;
 }
+.splash{
+    display:block;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    height: 100%;
+}
 .posts{
     list-style: none;
 }
 .sidebar{
+    display: none;
     position: fixed;
     background-color: white;
     top: 0;
@@ -44,6 +54,7 @@
     box-sizing: border-box;
 }
 .main{
+    display: none;
     position: absolute;
     background-color: white;
     top: 0;
@@ -52,6 +63,7 @@
     height: 100%;
 }
 .leftsidebar{
+    display: none;
     position: fixed;
     background-color: white;
     top: 0;

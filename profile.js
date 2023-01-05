@@ -8,34 +8,34 @@ if(uid == localStorage.getItem("user id")){
     self.location = "myprofile.html";
 }
 
-const docRef2 = doc(db, "users", localStorage.getItem("user id"));
+const docRef2 = doc(db, "testWeb", localStorage.getItem("user id"));
 var docSnap2 = await getDoc(docRef2);
 
-const docRef = doc(db, "users", uid);
+const docRef = doc(db, "testWeb", uid);
 var docSnap = await getDoc(docRef);
 if (docSnap.exists()) {
-    document.getElementById("username").textContent = docSnap.data().name + " " + docSnap.data().surname;
-    if(docSnap.data().profile_pic_url != undefined){
-        document.getElementById('profile_pic').src = docSnap.data().profile_pic_url;
+    document.getElementById("username").textContent = docSnap.data().UserInfo.userName;
+    if(docSnap.data().profilePicture != undefined){
+        document.getElementById('profile_pic').src = docSnap.data().profilePicture;
     }
-    if(docSnap.data().posts != undefined){
+    if(docSnap.data().data != undefined){
         var username_content = document.getElementById('username').textContent;
         var profile_pic_src = document.getElementById('profile_pic').src;
-        for(var i = 0; i < docSnap.data().posts.length; i++){
-            createPost(username_content, profile_pic_src, docSnap.data().posts[i].post_text, docSnap.data().posts[i].post_picture);
+        for(var i = 0; i < docSnap.data().data.data.length; i++){
+            createPost(username_content, profile_pic_src, docSnap.data().data.data[i].description, docSnap.data().data.data[i].pictureUrl, docSnap.data().UserInfo.uuid, i);
         }
     }
     if(docSnap.data().followers != undefined){
-        document.getElementById("followers_number").textContent = docSnap.data().followers.length;
-        for(var i = 0; i < docSnap.data().followers.length; i++){
-            if(docSnap.data().followers[i].uid == localStorage.getItem("user id")){
+        document.getElementById("followers_number").textContent = docSnap.data().followers.followers.length;
+        for(var i = 0; i < docSnap.data().followers.followers.length; i++){
+            if(docSnap.data().followers.followers[i].uid == localStorage.getItem("user id")){
                 document.getElementById('follow').textContent = "Following";
                 document.getElementById('follow').style.backgroundColor = "green";
             }
         }
     }
-    if(docSnap.data().follows != undefined){
-        document.getElementById("follows_number").textContent = docSnap.data().follows.length;
+    if(docSnap.data().following != undefined){
+        document.getElementById("follows_number").textContent = docSnap.data().following.following.length;
     }
 
 } 
@@ -49,13 +49,13 @@ document.getElementById('follow').addEventListener("click", async function(){
         document.getElementById('follow').style.backgroundColor = "green";
         document.getElementById('followers_number').textContent = parseInt(document.getElementById('followers_number').textContent) + 1;
         docSnap = await updateDoc(docRef, {
-            followers: arrayUnion({
-                uid : localStorage.getItem("user id")
+            "followers.followers": arrayUnion({
+                uid:  localStorage.getItem("user id")
             })
         })
 
         docSnap2 = await updateDoc(docRef2, {
-            follows: arrayUnion({
+            "following.following": arrayUnion({
                 uid: uid
             })
         })
@@ -67,13 +67,13 @@ document.getElementById('follow').addEventListener("click", async function(){
         document.getElementById('follow').style.backgroundColor = "black";
         document.getElementById('followers_number').textContent = parseInt(document.getElementById('followers_number').textContent) - 1;
         docSnap = await updateDoc(docRef, {
-            followers: arrayRemove({
+            "followers.followers": arrayRemove({
                 uid: localStorage.getItem("user id")
             })
         })
 
         docSnap2 = await updateDoc(docRef2, {
-            follows: arrayRemove({
+            "following.following": arrayRemove({
                 uid: uid
             })
         })
@@ -82,17 +82,15 @@ document.getElementById('follow').addEventListener("click", async function(){
 
 document.getElementById("search_button").addEventListener("click", async function(){
     document.getElementById("users").innerHTML = "";
-    const querySnapshot = await getDocs(collection(db, "users"));
+    const querySnapshot = await getDocs(collection(db, "testWeb"));
     querySnapshot.forEach((doc) => {
-    if(doc.data().posts != undefined){
-        var username_content = doc.data().name + " " + doc.data().surname;
+        var username_content = doc.data().UserInfo.userName;
         var profile_pic_src = "icons/profile.ico"
-        if(doc.data().profile_pic_url != undefined)
-            profile_pic_src = doc.data().profile_pic_url;
+        if(doc.data().profilePicture != undefined)
+            profile_pic_src = doc.data().profilePicture;
         if(username_content === document.getElementById("search_key").value){
-            createUser(username_content, profile_pic_src, doc.data().uid);
+            createUser(username_content, profile_pic_src, doc.data().UserInfo.uuid);
         }
-    }
     });
 })
 
@@ -119,7 +117,7 @@ function createUser(username_content, profile_pic_src, uid){
     document.getElementById('users').prepend(user);
 }
 
-function createPost(username_content, profile_pic_src, textContent, photo_src){
+async function createPost(username_content, profile_pic_src, textContent, photo_src, uid_of_user, index){
     if(textContent == "" && photo_src == undefined){
         return;
     }
@@ -142,14 +140,17 @@ function createPost(username_content, profile_pic_src, textContent, photo_src){
     fav.style.cssText = "position: relative; width: 30px; height: 30px; left: 30%; vertical-align: middle";
     save.style.cssText = "position: relative; width: 30px; height: 30px; left: 60%; vertical-align: middle";
     fav_number.style.cssText = "position: relative; left: 30%; font-size: 30px; vertical-align: middle;";
+    save_number.style.cssText = "position: relative; left: 60%; font-size: 30px; vertical-align: middle;";
 
     username.textContent = username_content;
     profile_pic.src = profile_pic_src;
     text.textContent = textContent;
     fav.src ="icons/unfavved.ico";
     fav.alt = "unfavved"
-    save.src = "icons/saved.ico";
+    save.src = "icons/add-list.ico";
+    save.alt = "unsaved"
     fav_number.textContent = "0";
+    save_number.textContent = "0";
 
     post.appendChild(profile_pic);
     post.appendChild(username);
@@ -162,19 +163,111 @@ function createPost(username_content, profile_pic_src, textContent, photo_src){
     post.appendChild(fav);
     post.appendChild(fav_number);
     post.appendChild(save);
+    post.appendChild(save_number);
 
     document.getElementById('posts').prepend(post);
+    
+    const docRef = doc(db, "testWeb", uid_of_user);
+    var docSnap = await getDoc(docRef);
+    if(docSnap.data().data.data[index] != undefined){
+        post = docSnap.data().data.data[index];
+        const current = post.like.indexOf(localStorage.getItem("user id"));
 
-    fav.addEventListener('click', function(){
+        if(current > -1){
+            fav.src = "icons/favved.ico";
+            fav.alt = "favved";
+        }
+        
+        const current2 = post.save.indexOf(localStorage.getItem("user id"));
+
+        if(current2 > -1){
+            save.src = "icons/added-list.ico";
+            save.alt = "saved";
+        }
+        
+        fav_number.textContent = post.like.length;
+        save_number.textContent = post.save.length;
+    }
+
+    save.addEventListener('click', async function(){
+
+        if(save.alt == "unsaved"){
+            save.src = "icons/added-list.ico";
+            save.alt = "saved";
+            save_number.textContent = parseInt(save_number.textContent) + 1;
+            
+            const docRef = doc(db, "testWeb", uid_of_user);
+            var docSnap = await getDoc(docRef);
+            post = docSnap.data().data.data[index];
+            post.save.push(localStorage.getItem("user id"));
+            var docSnaps = await updateDoc(docRef, {
+                "data.data": arrayRemove(docSnap.data().data.data[index])
+            })
+            docSnaps = await updateDoc(docRef, {
+                "data.data": arrayUnion(post)
+            })
+        }
+        else{
+            save.src = "icons/add-list.ico";
+            save.alt = "unsaved";
+            save_number.textContent = parseInt(save_number.textContent) - 1;
+            const docRef = doc(db, "testWeb", uid_of_user);
+            var docSnap = await getDoc(docRef);
+            post = docSnap.data().data.data[index];
+            const remove = post.save.indexOf(localStorage.getItem("user id"));
+            if (remove > -1) { 
+            post.like.splice(remove, 1); 
+            }
+            var docSnaps = await updateDoc(docRef, {
+                "data.data": arrayRemove(docSnap.data().data.data[index])
+            })
+            docSnaps = await updateDoc(docRef, {
+                "data.data": arrayUnion(post)
+            })
+        }
+    })
+
+
+    fav.addEventListener('click', async function(){
         if(fav.alt == "unfavved"){
             fav.src = "icons/favved.ico";
             fav.alt = "favved";
             fav_number.textContent = parseInt(fav_number.textContent) + 1;
+            const docRef = doc(db, "testWeb", uid_of_user);
+            var docSnap = await getDoc(docRef);
+            post = docSnap.data().data.data[index];
+            post.like.push(localStorage.getItem("user id"));
+            var docSnaps = await updateDoc(docRef, {
+                "data.data": arrayRemove(docSnap.data().data.data[index])
+            })
+            docSnaps = await updateDoc(docRef, {
+                "data.data": arrayUnion(post)
+            })
         }
         else{
             fav.src = "icons/unfavved.ico";
             fav.alt = "unfavved";
             fav_number.textContent = parseInt(fav_number.textContent) - 1;
+            const docRef = doc(db, "testWeb", uid_of_user);
+            var docSnap = await getDoc(docRef);
+            post = docSnap.data().data.data[index];
+            const remove = post.like.indexOf(localStorage.getItem("user id"));
+            if (remove > -1) { 
+            post.save.splice(remove, 1); 
+            }
+            var docSnaps = await updateDoc(docRef, {
+                "data.data": arrayRemove(docSnap.data().data.data[index])
+            })
+            docSnaps = await updateDoc(docRef, {
+                "data.data": arrayUnion(post)
+            })
         }
     })
 }
+
+setTimeout(function(){
+    document.getElementById("splash").style.display = "none";  
+    document.getElementById("main").style.display = "block";
+    document.getElementById("sidebar").style.display = "block";
+    document.getElementById("leftsidebar").style.display = "block";
+}, 500); 
