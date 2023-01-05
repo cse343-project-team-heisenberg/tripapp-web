@@ -1,0 +1,115 @@
+.list-element{
+    position: relative;
+    margin-top: 30px;
+    left: 50%;
+}
+.list-image{
+    height: 30px;
+    vertical-align: bottom;
+    display: inline;
+}
+.list-text{
+    font-size: 30px;
+    font-family: Arial, Helvetica, sans-serif;
+    display: inline;
+}
+.list-link{
+    text-decoration: none;
+    color: black
+}
+.list{
+    list-style: none;
+    padding: 0;
+    position: absolute;
+}
+.logout{
+    position: absolute;
+    bottom: 0%;
+    left: 0%;
+    border-radius: 20px;
+    height: 30px;
+    width: 100%;
+}
+.splash{
+    display:block;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    height: 100%;
+}
+.posts{
+    list-style: none;
+}
+.sidebar{
+    display: none;
+    position: fixed;
+    background-color: white;
+    top: 0;
+    left: 0;
+    width: 25%;
+    min-height: 100%;
+    border-right: 1px solid black;
+    box-sizing: border-box;
+}
+.main{
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: 0;
+    left: 25%;
+    width: 50%;
+    height: 100%;
+}
+.leftsidebar{
+    display: none;
+    position: fixed;
+    background-color: white;
+    top: 0;
+    right: 0;
+    width: 25%;
+    min-height: 100%;
+    border-left: 1px solid black;
+    box-sizing: border-box;
+}
+
+.posts_section{
+    position: absolute;
+    left: 0%;
+    top: 0%;
+    width: 100%;
+    height: 100%;
+    background-color: white;
+    box-sizing: border-box;
+}
+.search_key{
+    display: inline-block;
+    height: 30px;
+    width: 90%;
+    position: relative;
+    box-sizing: border-box;
+    outline: none;
+    border: 1px solid black;
+    border-right: none;
+}
+
+.search_button{
+    position: fixed;
+    width: 30px;
+    height: 30px;
+    box-sizing: border-box;
+    border: 1px solid black;
+    border-left: none;
+    background-color: white;
+}
+
+.search_button img{
+    width: 20px;
+    height: 20px;
+}
+
+body{
+    height: 100%;
+    width: 100%;
+}
