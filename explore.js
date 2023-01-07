@@ -13,16 +13,28 @@ setTimeout(function(){
 const uid = localStorage.getItem("user id");
 
 const querySnapshot = await getDocs(collection(db, "testWeb"));
-querySnapshot.forEach((doc) => {
-    var boolean = Math.random();
-    if(boolean > 0.5){
-        if(doc.data().data.data.length != 0){
-            var index = Math.floor(Math.random() * doc.data().data.data.length);
-            var userName = doc.data().UserInfo.userName;
+querySnapshot.forEach(async (docs) => {
+    const docRef = doc(db, "testWeb", uid);
+    var docSnap = await getDoc(docRef);
+    var followings = [];
+    var followed = false;
+    if(docSnap.exists()){
+        followings = docSnap.data().following.following;
+    }
+    for(var i = 0; i < followings.length; i++){
+        if(followings[i].uid == docs.data().UserInfo.uuid){
+            followed = true
+            break;
+        }
+    }
+    if(!followed){
+        if(docs.data().data.data.length != 0){
+            var index = Math.floor(Math.random() * docs.data().data.data.length);
+            var userName = docs.data().UserInfo.userName;
             var profile_pic_src = "icons/profile.ico";
-            if(doc.data().profilePicture != undefined)
-                profile_pic_src = doc.data().profilePicture;
-            createPost(userName, profile_pic_src, doc.data().data.data[index].description, doc.data().data.data[index].pictureUrl, doc.data().UserInfo.uuid, index);
+            if(docs.data().profilePicture != undefined)
+                profile_pic_src = docs.data().profilePicture;
+            createPost(userName, profile_pic_src, docs.data().data.data[index].description, docs.data().data.data[index].pictureUrl, docs.data().UserInfo.uuid, index);
         }
     }
 });

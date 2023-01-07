@@ -18,6 +18,8 @@ if (docSnap.exists()) {
     if(docSnap.data().profilePicture != undefined){
         document.getElementById('profile_pic').src = docSnap.data().profilePicture;
     }
+    if(docSnap.data().UserInfo.biography != undefined)
+        document.getElementById('bio').value = docSnap.data().UserInfo.biography;
     if(docSnap.data().data != undefined){
         var username_content = document.getElementById('username').textContent;
         var profile_pic_src = document.getElementById('profile_pic').src;
