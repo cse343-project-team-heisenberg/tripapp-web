@@ -27,7 +27,7 @@ querySnapshot.forEach(async (docs) => {
             break;
         }
     }
-    if(!followed){
+    if(!followed && docs.data().UserInfo.uuid != uid){
         if(docs.data().data.data.length != 0){
             var index = Math.floor(Math.random() * docs.data().data.data.length);
             var userName = docs.data().UserInfo.userName;
