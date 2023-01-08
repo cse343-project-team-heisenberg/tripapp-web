@@ -11,6 +11,8 @@ if (docSnap.exists()) {
     document.getElementById("username").textContent = docSnap.data().UserInfo.userName;
     if(docSnap.data().profilePicture != undefined)
         document.getElementById('profile_pic').src = docSnap.data().profilePicture;
+    if(docSnap.data().UserInfo.biography != undefined)
+        document.getElementById('bio').value = docSnap.data().UserInfo.biography;
     if(docSnap.data().data != undefined){
         var username_content = document.getElementById('username').textContent;
         var profile_pic_src = document.getElementById('profile_pic').src;
@@ -286,6 +288,21 @@ document.getElementById('post_photo').addEventListener("change", function(){
         document.getElementById('post_photo_display').src = read.result;
     }
 })
+
+document.getElementById('edit_biography').addEventListener('click', function(){
+    document.getElementById('bio').disabled = false;
+    document.getElementById('save_biography').style.display = "block";
+    document.getElementById('edit_biography').style.display = "none";
+
+})
+document.getElementById('save_biography').addEventListener('click', async function(){
+    document.getElementById('bio').disabled = true;
+    document.getElementById('save_biography').style.display = "none";
+    document.getElementById('edit_biography').style.display = "block";
+    docSnap = await updateDoc(docRef, {
+        "UserInfo.biography": document.getElementById('bio').value
+    })
+})    
 
 setTimeout(function(){
     document.getElementById("splash").style.display = "none";  

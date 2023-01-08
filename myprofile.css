@@ -164,6 +164,18 @@
     border-right: none;
 }
 
+.edit_biography{
+    position: absolute;
+    height: 30px;
+    width: 150px;
+    border-radius: 20px;
+    background-color: black;
+    color: white;
+    font-size: 20px;
+    right: 10px;
+    top: 50px;
+}
+
 .search_button{
     position: fixed;
     width: 30px;

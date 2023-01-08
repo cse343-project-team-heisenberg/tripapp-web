@@ -43,12 +43,13 @@ document.getElementById('signup').addEventListener("click", async function(){
     var password = document.getElementById("password").value;
     var username = document.getElementById("username").value;
   
-    sendEmailVerification(auth.currentUser).then(() =>{
         createUserWithEmailAndPassword(auth,email,password).then(async (userCredential) =>{
             const user = userCredential.user;   
             
             var name = document.getElementById("name").value;
             var surname = document.getElementById("surname").value;
+
+            sendEmailVerification(auth.currentUser).then(() =>{});
                
             await await setDoc(doc(db, "testWeb", user.uid), {
                 UserInfo: {
@@ -74,7 +75,6 @@ document.getElementById('signup').addEventListener("click", async function(){
             document.getElementById("emailUsedError").style.display = "block";
             
         })
-    });
 });
 
 /* Timeout will be arranged after the implementation is finished. */
