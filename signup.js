@@ -51,7 +51,7 @@ document.getElementById('signup').addEventListener("click", async function(){
 
             sendEmailVerification(auth.currentUser).then(() =>{});
                
-            await await setDoc(doc(db, "testWeb", user.uid), {
+            await await setDoc(doc(db, "Post", user.uid), {
                 UserInfo: {
                 uuid: user.uid,
                 mail: email,

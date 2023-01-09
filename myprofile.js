@@ -5,7 +5,7 @@ import { ref, uploadBytes, getDownloadURL} from "https://www.gstatic.com/firebas
 
 const uid = localStorage.getItem("user id");
 
-const docRef = doc(db, "testWeb", uid);
+const docRef = doc(db, "Post", uid);
 var docSnap = await getDoc(docRef);
 if (docSnap.exists()) {
     document.getElementById("username").textContent = docSnap.data().UserInfo.userName;
@@ -29,7 +29,7 @@ console.log("No such document!");
 
 document.getElementById("search_button").addEventListener("click", async function(){
     document.getElementById("users").innerHTML = "";
-    const querySnapshot = await getDocs(collection(db, "testWeb"));
+    const querySnapshot = await getDocs(collection(db, "Post"));
     querySnapshot.forEach((doc) => {
         var username_content = doc.data().UserInfo.userName;
         var profile_pic_src = "icons/profile.ico"
@@ -136,7 +136,7 @@ async function createPost(username_content, profile_pic_src, textContent, photo_
     post.appendChild(save_number);
     document.getElementById('posts').prepend(post);
 
-    const docRef = doc(db, "testWeb", uid_of_user);
+    const docRef = doc(db, "Post", uid_of_user);
     var docSnap = await getDoc(docRef);
     if(docSnap.data().data.data[index] != undefined){
         post = docSnap.data().data.data[index];
@@ -165,7 +165,7 @@ async function createPost(username_content, profile_pic_src, textContent, photo_
             save.alt = "saved";
             save_number.textContent = parseInt(save_number.textContent) + 1;
             
-            const docRef = doc(db, "testWeb", uid_of_user);
+            const docRef = doc(db, "Post", uid_of_user);
             var docSnap = await getDoc(docRef);
             post = docSnap.data().data.data[index];
             post.save.push(uid);
@@ -180,7 +180,7 @@ async function createPost(username_content, profile_pic_src, textContent, photo_
             save.src = "icons/add-list.ico";
             save.alt = "unsaved";
             save_number.textContent = parseInt(save_number.textContent) - 1;
-            const docRef = doc(db, "testWeb", uid_of_user);
+            const docRef = doc(db, "Post", uid_of_user);
             var docSnap = await getDoc(docRef);
             post = docSnap.data().data.data[index];
             const remove = post.save.indexOf(uid);
@@ -201,7 +201,7 @@ async function createPost(username_content, profile_pic_src, textContent, photo_
             fav.src = "icons/favved.ico";
             fav.alt = "favved";
             fav_number.textContent = parseInt(fav_number.textContent) + 1;
-            const docRef = doc(db, "testWeb", uid_of_user);
+            const docRef = doc(db, "Post", uid_of_user);
             var docSnap = await getDoc(docRef);
             post = docSnap.data().data.data[index];
             post.like.push(uid);
@@ -216,7 +216,7 @@ async function createPost(username_content, profile_pic_src, textContent, photo_
             fav.src = "icons/unfavved.ico";
             fav.alt = "unfavved";
             fav_number.textContent = parseInt(fav_number.textContent) - 1;
-            const docRef = doc(db, "testWeb", uid_of_user);
+            const docRef = doc(db, "Post", uid_of_user);
             var docSnap = await getDoc(docRef);
             post = docSnap.data().data.data[index];
             const remove = post.like.indexOf(uid);
@@ -241,7 +241,7 @@ document.getElementById('post_it').addEventListener("click", async function(){
     var docSnaps;
     if(document.getElementById('post_photo').files[0] != undefined){
         var read = new FileReader();
-
+        const docRef = doc(db, "Post", uid);
         var file = document.getElementById('post_photo').files[0];
         const storageRef = ref(storage, "web/" + file.name);
         const uploadTask = uploadBytes(storageRef, file).then(function(snapshot){
@@ -259,12 +259,14 @@ document.getElementById('post_it').addEventListener("click", async function(){
         })
 
         read.readAsDataURL(document.getElementById('post_photo').files[0]);
-        read.onload = function(){
+        read.onload = async function(){
             photo_src = read.result;
+            var docSnap = await getDoc(docRef);
             createPost(username_content, profile_pic_src, textContent, photo_src, uid, docSnap.data().data.data.length);
         }
     }
     else{
+        const docRef = doc(db, "Post", uid);
         docSnaps = await updateDoc(docRef, {
             "data.data": arrayUnion({
                 description: textContent,
@@ -273,6 +275,7 @@ document.getElementById('post_it').addEventListener("click", async function(){
                 save: []
             })
         })
+        var docSnap = await getDoc(docRef);
         createPost(username_content, profile_pic_src, textContent, photo_src, uid, docSnap.data().data.data.length);
     }
 

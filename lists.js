@@ -12,15 +12,17 @@ setTimeout(function(){
 
 const uid = localStorage.getItem("user id");
 
-const querySnapshot = await getDocs(collection(db, "testWeb"));
+const querySnapshot = await getDocs(collection(db, "Post"));
 querySnapshot.forEach((doc) => {
-    for(var i = 0; i < doc.data().data.data.length; i++){
-        var userName = doc.data().UserInfo.userName;
-        var profile_pic_src = "icons/profile.ico";
-        if(doc.data().profilePicture != undefined)
-            profile_pic_src = doc.data().profilePicture;
-        if(doc.data().data.data[i].save.indexOf(uid) > -1){
-            createPost(doc.data().UserInfo.userName, profile_pic_src, doc.data().data.data[i].description, doc.data().data.data[i].pictureUrl, doc.data().UserInfo.uuid, i);
+    if(doc.data().data != undefined){
+        for(var i = 0; i < doc.data().data.data.length; i++){
+            var userName = doc.data().UserInfo.userName;
+            var profile_pic_src = "icons/profile.ico";
+            if(doc.data().profilePicture != undefined)
+                profile_pic_src = doc.data().profilePicture;
+            if(doc.data().data.data[i].save.indexOf(uid) > -1){
+                createPost(doc.data().UserInfo.userName, profile_pic_src, doc.data().data.data[i].description, doc.data().data.data[i].pictureUrl, doc.data().UserInfo.uuid, i);
+            }
         }
     }
 });
@@ -79,7 +81,7 @@ async function createPost(username_content, profile_pic_src, textContent, photo_
         self.location = "profile.html?uid=" + uid_of_user;
     });
 
-    const docRef = doc(db, "testWeb", uid_of_user);
+    const docRef = doc(db, "Post", uid_of_user);
     var docSnap = await getDoc(docRef);
     if(docSnap.data().data.data[index] != undefined){
         post = docSnap.data().data.data[index];
@@ -108,7 +110,7 @@ async function createPost(username_content, profile_pic_src, textContent, photo_
             save.alt = "saved";
             save_number.textContent = parseInt(save_number.textContent) + 1;
             
-            const docRef = doc(db, "testWeb", uid_of_user);
+            const docRef = doc(db, "Post", uid_of_user);
             var docSnap = await getDoc(docRef);
             post = docSnap.data().data.data[index];
             post.save.push(uid);
@@ -123,7 +125,7 @@ async function createPost(username_content, profile_pic_src, textContent, photo_
             save.src = "icons/add-list.ico";
             save.alt = "unsaved";
             save_number.textContent = parseInt(save_number.textContent) - 1;
-            const docRef = doc(db, "testWeb", uid_of_user);
+            const docRef = doc(db, "Post", uid_of_user);
             var docSnap = await getDoc(docRef);
             post = docSnap.data().data.data[index];
             const remove = post.save.indexOf(uid);
@@ -144,7 +146,7 @@ async function createPost(username_content, profile_pic_src, textContent, photo_
             fav.src = "icons/favved.ico";
             fav.alt = "favved";
             fav_number.textContent = parseInt(fav_number.textContent) + 1;
-            const docRef = doc(db, "testWeb", uid_of_user);
+            const docRef = doc(db, "Post", uid_of_user);
             var docSnap = await getDoc(docRef);
             post = docSnap.data().data.data[index];
             post.like.push(uid);
@@ -159,7 +161,7 @@ async function createPost(username_content, profile_pic_src, textContent, photo_
             fav.src = "icons/unfavved.ico";
             fav.alt = "unfavved";
             fav_number.textContent = parseInt(fav_number.textContent) - 1;
-            const docRef = doc(db, "testWeb", uid_of_user);
+            const docRef = doc(db, "Post", uid_of_user);
             var docSnap = await getDoc(docRef);
             post = docSnap.data().data.data[index];
             const remove = post.like.indexOf(uid);
@@ -174,4 +176,41 @@ async function createPost(username_content, profile_pic_src, textContent, photo_
             })
         }
     })
+}
+
+document.getElementById("search_button").addEventListener("click", async function(){
+    document.getElementById("users").innerHTML = "";
+    const querySnapshot = await getDocs(collection(db, "Post"));
+    querySnapshot.forEach((doc) => {
+        var username_content = doc.data().UserInfo.userName;
+        var profile_pic_src = "icons/profile.ico"
+        if(doc.data().profilePicture != undefined)
+            profile_pic_src = doc.data().profilePicture;
+        if(username_content === document.getElementById("search_key").value){
+            createUser(username_content, profile_pic_src, doc.data().UserInfo.uuid);
+        }
+    });
+})
+
+document.getElementById("search_key").addEventListener("input", function(){
+    document.getElementById("users").innerHTML = "";
+})
+
+function createUser(username_content, profile_pic_src, uid){
+    var user = document.createElement("li");
+    var link = document.createElement("a");
+    var profile_pic = document.createElement("img");
+    var username = document.createElement("text");
+
+    user.style.cssText = "width: 80%; height: 10%; display: block; border: 1px solid black; border-radius: 20px";
+    profile_pic.style.cssText = "border-radius: 50%; width: 30px; height: 30px";
+    username.style.cssText = " width: 30px;height: 25px;font-size: 25px; vertical-align: top; "
+    link.style.cssText = "text-decoration: none; color: black";
+    link.href = "profile.html?uid=" + uid;
+    username.textContent = username_content;
+    profile_pic.src = profile_pic_src;
+    link.appendChild(profile_pic)
+    link.appendChild(username);
+    user.appendChild(link);
+    document.getElementById('users').prepend(user);
 }

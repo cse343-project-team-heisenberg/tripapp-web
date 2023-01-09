@@ -12,9 +12,9 @@ setTimeout(function(){
 
 const uid = localStorage.getItem("user id");
 
-const querySnapshot = await getDocs(collection(db, "testWeb"));
+const querySnapshot = await getDocs(collection(db, "Post"));
 querySnapshot.forEach(async (docs) => {
-    const docRef = doc(db, "testWeb", uid);
+    const docRef = doc(db, "Post", uid);
     var docSnap = await getDoc(docRef);
     var followings = [];
     var followed = false;
@@ -22,19 +22,21 @@ querySnapshot.forEach(async (docs) => {
         followings = docSnap.data().following.following;
     }
     for(var i = 0; i < followings.length; i++){
-        if(followings[i].uid == docs.data().UserInfo.uuid){
+        if(followings[i] == docs.data().UserInfo.uuid){
             followed = true
             break;
         }
     }
     if(!followed && docs.data().UserInfo.uuid != uid){
-        if(docs.data().data.data.length != 0){
-            var index = Math.floor(Math.random() * docs.data().data.data.length);
-            var userName = docs.data().UserInfo.userName;
-            var profile_pic_src = "icons/profile.ico";
-            if(docs.data().profilePicture != undefined)
-                profile_pic_src = docs.data().profilePicture;
-            createPost(userName, profile_pic_src, docs.data().data.data[index].description, docs.data().data.data[index].pictureUrl, docs.data().UserInfo.uuid, index);
+        if(docs.data().data != undefined){
+            if(docs.data().data.data.length != 0){
+                var index = Math.floor(Math.random() * docs.data().data.data.length);
+                var userName = docs.data().UserInfo.userName;
+                var profile_pic_src = "icons/profile.ico";
+                if(docs.data().profilePicture != undefined)
+                    profile_pic_src = docs.data().profilePicture;
+                createPost(userName, profile_pic_src, docs.data().data.data[index].description, docs.data().data.data[index].pictureUrl, docs.data().UserInfo.uuid, index);
+            }
         }
     }
 });
@@ -93,7 +95,7 @@ async function createPost(username_content, profile_pic_src, textContent, photo_
         self.location = "profile.html?uid=" + uid_of_user;
     });
 
-    const docRef = doc(db, "testWeb", uid_of_user);
+    const docRef = doc(db, "Post", uid_of_user);
     var docSnap = await getDoc(docRef);
     if(docSnap.data().data.data[index] != undefined){
         post = docSnap.data().data.data[index];
@@ -122,7 +124,7 @@ async function createPost(username_content, profile_pic_src, textContent, photo_
             save.alt = "saved";
             save_number.textContent = parseInt(save_number.textContent) + 1;
             
-            const docRef = doc(db, "testWeb", uid_of_user);
+            const docRef = doc(db, "Post", uid_of_user);
             var docSnap = await getDoc(docRef);
             post = docSnap.data().data.data[index];
             post.save.push(uid);
@@ -137,7 +139,7 @@ async function createPost(username_content, profile_pic_src, textContent, photo_
             save.src = "icons/add-list.ico";
             save.alt = "unsaved";
             save_number.textContent = parseInt(save_number.textContent) - 1;
-            const docRef = doc(db, "testWeb", uid_of_user);
+            const docRef = doc(db, "Post", uid_of_user);
             var docSnap = await getDoc(docRef);
             post = docSnap.data().data.data[index];
             const remove = post.save.indexOf(uid);
@@ -158,7 +160,7 @@ async function createPost(username_content, profile_pic_src, textContent, photo_
             fav.src = "icons/favved.ico";
             fav.alt = "favved";
             fav_number.textContent = parseInt(fav_number.textContent) + 1;
-            const docRef = doc(db, "testWeb", uid_of_user);
+            const docRef = doc(db, "Post", uid_of_user);
             var docSnap = await getDoc(docRef);
             post = docSnap.data().data.data[index];
             post.like.push(uid);
@@ -173,7 +175,7 @@ async function createPost(username_content, profile_pic_src, textContent, photo_
             fav.src = "icons/unfavved.ico";
             fav.alt = "unfavved";
             fav_number.textContent = parseInt(fav_number.textContent) - 1;
-            const docRef = doc(db, "testWeb", uid_of_user);
+            const docRef = doc(db, "Post", uid_of_user);
             var docSnap = await getDoc(docRef);
             post = docSnap.data().data.data[index];
             const remove = post.like.indexOf(uid);
@@ -192,7 +194,7 @@ async function createPost(username_content, profile_pic_src, textContent, photo_
 
 document.getElementById("search_button").addEventListener("click", async function(){
     document.getElementById("users").innerHTML = "";
-    const querySnapshot = await getDocs(collection(db, "testWeb"));
+    const querySnapshot = await getDocs(collection(db, "Post"));
     querySnapshot.forEach((doc) => {
         var username_content = doc.data().UserInfo.userName;
         var profile_pic_src = "icons/profile.ico"
