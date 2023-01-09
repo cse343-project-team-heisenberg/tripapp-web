@@ -1,3 +1,31 @@
+import { doc, getDoc, updateDoc, arrayUnion, getDocs, collection, arrayRemove} from "https://www.gstatic.com/firebasejs/9.12.0/firebase-firestore.js";
+import { db, storage} from "/firebase_config.js"
+import { ref, uploadBytes, getDownloadURL} from "https://www.gstatic.com/firebasejs/9.12.0/firebase-storage.js";
+
+const uid = localStorage.getItem("user id");
+const docRef = doc(db, "testWeb", uid);
+var docSnap = await getDoc(docRef);
+
+if (docSnap.exists()) {
+    createNotification("icons/notif_bell.png","welcome to tripapp!")
+    for(var i=0;i<docSnap.data().data.data.length;++i){
+        for(var j = 0; j < docSnap.data().data.data[i].like.length; j++){
+            const new_uid = String(docSnap.data().data.data[i].like[j]);
+            const new_docRef = doc(db, "testWeb", new_uid);
+            var new_docSnap = await getDoc(new_docRef);
+            var profile_pic = (new_docSnap.data().profilePicture != undefined) ? new_docSnap.data().profilePicture : "icons/profile.ico";
+            createNotification(profile_pic,new_docSnap.data().UserInfo.userName + " liked your post!")
+        }
+    }
+    for(var j = 0; j < docSnap.data().following.following.length; j++){
+        const new_uid = String(docSnap.data().following.following[j].uid);
+        const new_docRef = doc(db, "testWeb", new_uid);
+        var new_docSnap = await getDoc(new_docRef);
+        var profile_pic = (new_docSnap.data().profilePicture != undefined) ? new_docSnap.data().profilePicture : "icons/profile.ico";
+        createNotification(profile_pic,new_docSnap.data().UserInfo.userName + " followed you!")
+    }
+}
+
 setTimeout(function(){
     document.getElementById("splash").style.display = "none";  
     document.getElementById("main").style.display = "block";
