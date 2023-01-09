@@ -16,17 +16,17 @@ document.getElementById("login").addEventListener("click", function(){
 
     signInWithEmailAndPassword(auth,email,password)  .then((userCredential) => {
 
-        if(userCredential.user.emailVerified){
+        //if(userCredential.user.emailVerified){
 
             const user = userCredential.user;
 
             localStorage.setItem("user id", user.uid);
 
             self.location = "myprofile.html";
-        }
-        else{
+        //}
+        //else{
             document.getElementById('verificationError').style.display = "block";
-        }
+        //}
 
     })
 

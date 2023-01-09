@@ -8,14 +8,15 @@ var username;
 var profile_pic_src = "icons/profile.ico";
 
 
-const docRef = doc(db, "testWeb", uid);
+const docRef = doc(db, "Post", uid);
 var docSnap = await getDoc(docRef);
+//console.log(uid);
 if (docSnap.exists()) {
     username = docSnap.data().UserInfo.userName;
     if(docSnap.data().profilePicture != undefined)
         profile_pic_src = docSnap.data().profilePicture;
     for(var i = 0; i < docSnap.data().following.following.length; i++){
-        const docRefothers = doc(db, "testWeb", docSnap.data().following.following[i].uid);
+        const docRefothers = doc(db, "Post", docSnap.data().following.following[i]);
         var docSnapothers = await getDoc(docRefothers);
         if(docSnapothers.exists()){
             var usernameOthers = docSnapothers.data().UserInfo.userName;
@@ -40,7 +41,7 @@ else {
 
 document.getElementById("search_button").addEventListener("click", async function(){
     document.getElementById("users").innerHTML = "";
-    const querySnapshot = await getDocs(collection(db, "testWeb"));
+    const querySnapshot = await getDocs(collection(db, "Post"));
     querySnapshot.forEach((doc) => {
         var username_content = doc.data().UserInfo.userName;
         var profile_pic_src = "icons/profile.ico"
@@ -142,7 +143,7 @@ async function createPost(username_content, profile_pic_src, textContent, photo_
         self.location = "profile.html?uid=" + uid_of_user;
     });
 
-    const docRef = doc(db, "testWeb", uid_of_user);
+    const docRef = doc(db, "Post", uid_of_user);
     var docSnap = await getDoc(docRef);
     if(docSnap.data().data.data[index] != undefined){
         post = docSnap.data().data.data[index];
@@ -170,7 +171,7 @@ async function createPost(username_content, profile_pic_src, textContent, photo_
             save.alt = "saved";
             save_number.textContent = parseInt(save_number.textContent) + 1;
             
-            const docRef = doc(db, "testWeb", uid_of_user);
+            const docRef = doc(db, "Post", uid_of_user);
             var docSnap = await getDoc(docRef);
             post = docSnap.data().data.data[index];
             post.save.push(uid);
@@ -185,7 +186,7 @@ async function createPost(username_content, profile_pic_src, textContent, photo_
             save.src = "icons/add-list.ico";
             save.alt = "unsaved";
             save_number.textContent = parseInt(save_number.textContent) - 1;
-            const docRef = doc(db, "testWeb", uid_of_user);
+            const docRef = doc(db, "Post", uid_of_user);
             var docSnap = await getDoc(docRef);
             post = docSnap.data().data.data[index];
             const remove = post.save.indexOf(uid);
@@ -206,7 +207,7 @@ async function createPost(username_content, profile_pic_src, textContent, photo_
             fav.src = "icons/favved.ico";
             fav.alt = "favved";
             fav_number.textContent = parseInt(fav_number.textContent) + 1;
-            const docRef = doc(db, "testWeb", uid_of_user);
+            const docRef = doc(db, "Post", uid_of_user);
             var docSnap = await getDoc(docRef);
             post = docSnap.data().data.data[index];
             post.like.push(uid);
@@ -221,7 +222,7 @@ async function createPost(username_content, profile_pic_src, textContent, photo_
             fav.src = "icons/unfavved.ico";
             fav.alt = "unfavved";
             fav_number.textContent = parseInt(fav_number.textContent) - 1;
-            const docRef = doc(db, "testWeb", uid_of_user);
+            const docRef = doc(db, "Post", uid_of_user);
             var docSnap = await getDoc(docRef);
             post = docSnap.data().data.data[index];
             const remove = post.like.indexOf(uid);

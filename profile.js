@@ -8,10 +8,10 @@ if(uid == localStorage.getItem("user id")){
     self.location = "myprofile.html";
 }
 
-const docRef2 = doc(db, "testWeb", localStorage.getItem("user id"));
+const docRef2 = doc(db, "Post", localStorage.getItem("user id"));
 var docSnap2 = await getDoc(docRef2);
 
-const docRef = doc(db, "testWeb", uid);
+const docRef = doc(db, "Post", uid);
 var docSnap = await getDoc(docRef);
 if (docSnap.exists()) {
     document.getElementById("username").textContent = docSnap.data().UserInfo.userName;
@@ -30,7 +30,7 @@ if (docSnap.exists()) {
     if(docSnap.data().followers != undefined){
         document.getElementById("followers_number").textContent = docSnap.data().followers.followers.length;
         for(var i = 0; i < docSnap.data().followers.followers.length; i++){
-            if(docSnap.data().followers.followers[i].uid == localStorage.getItem("user id")){
+            if(docSnap.data().followers.followers[i] == localStorage.getItem("user id")){
                 document.getElementById('follow').textContent = "Following";
                 document.getElementById('follow').style.backgroundColor = "green";
             }
@@ -50,41 +50,51 @@ document.getElementById('follow').addEventListener("click", async function(){
         document.getElementById('follow').textContent = "Following";
         document.getElementById('follow').style.backgroundColor = "green";
         document.getElementById('followers_number').textContent = parseInt(document.getElementById('followers_number').textContent) + 1;
+        const docRef2 = doc(db, "Post", localStorage.getItem("user id"));
+        var docSnap2 = await getDoc(docRef2);
+        const docRef = doc(db, "Post", uid);
+        var docSnap = await getDoc(docRef);
+        var followers = docSnap.data().followers.followers;
+        followers.push(localStorage.getItem("user id"));
         docSnap = await updateDoc(docRef, {
-            "followers.followers": arrayUnion({
-                uid:  localStorage.getItem("user id")
-            })
+            "followers.followers": followers,
         })
-
+        var following = docSnap2.data().following.following;
+        following.push(uid);
         docSnap2 = await updateDoc(docRef2, {
-            "following.following": arrayUnion({
-                uid: uid
-            })
+            "following.following": following
         })
-
-
     }
     else{
         document.getElementById('follow').textContent = "Follow";
         document.getElementById('follow').style.backgroundColor = "black";
         document.getElementById('followers_number').textContent = parseInt(document.getElementById('followers_number').textContent) - 1;
+        const docRef2 = doc(db, "Post", localStorage.getItem("user id"));
+        var docSnap2 = await getDoc(docRef2);
+        const docRef = doc(db, "Post", uid);
+        var docSnap = await getDoc(docRef);
+        var followers = docSnap.data().followers.followers;
+        var remove = followers.indexOf(localStorage.getItem("user id"));
+        if(remove > -1){
+            followers.splice(remove, 1);
+        }
         docSnap = await updateDoc(docRef, {
-            "followers.followers": arrayRemove({
-                uid: localStorage.getItem("user id")
-            })
+            "followers.followers": followers
         })
-
+        var following = docSnap2.data().following.following;
+        remove = following.indexOf(uid);
+        if(remove > -1){
+            following.splice(remove, 1);
+        }
         docSnap2 = await updateDoc(docRef2, {
-            "following.following": arrayRemove({
-                uid: uid
-            })
+            "following.following": following
         })
     }
 });
 
 document.getElementById("search_button").addEventListener("click", async function(){
     document.getElementById("users").innerHTML = "";
-    const querySnapshot = await getDocs(collection(db, "testWeb"));
+    const querySnapshot = await getDocs(collection(db, "Post"));
     querySnapshot.forEach((doc) => {
         var username_content = doc.data().UserInfo.userName;
         var profile_pic_src = "icons/profile.ico"
@@ -169,7 +179,7 @@ async function createPost(username_content, profile_pic_src, textContent, photo_
 
     document.getElementById('posts').prepend(post);
     
-    const docRef = doc(db, "testWeb", uid_of_user);
+    const docRef = doc(db, "Post", uid_of_user);
     var docSnap = await getDoc(docRef);
     if(docSnap.data().data.data[index] != undefined){
         post = docSnap.data().data.data[index];
@@ -198,7 +208,7 @@ async function createPost(username_content, profile_pic_src, textContent, photo_
             save.alt = "saved";
             save_number.textContent = parseInt(save_number.textContent) + 1;
             
-            const docRef = doc(db, "testWeb", uid_of_user);
+            const docRef = doc(db, "Post", uid_of_user);
             var docSnap = await getDoc(docRef);
             post = docSnap.data().data.data[index];
             post.save.push(localStorage.getItem("user id"));
@@ -213,7 +223,7 @@ async function createPost(username_content, profile_pic_src, textContent, photo_
             save.src = "icons/add-list.ico";
             save.alt = "unsaved";
             save_number.textContent = parseInt(save_number.textContent) - 1;
-            const docRef = doc(db, "testWeb", uid_of_user);
+            const docRef = doc(db, "Post", uid_of_user);
             var docSnap = await getDoc(docRef);
             post = docSnap.data().data.data[index];
             const remove = post.save.indexOf(localStorage.getItem("user id"));
@@ -235,7 +245,7 @@ async function createPost(username_content, profile_pic_src, textContent, photo_
             fav.src = "icons/favved.ico";
             fav.alt = "favved";
             fav_number.textContent = parseInt(fav_number.textContent) + 1;
-            const docRef = doc(db, "testWeb", uid_of_user);
+            const docRef = doc(db, "Post", uid_of_user);
             var docSnap = await getDoc(docRef);
             post = docSnap.data().data.data[index];
             post.like.push(localStorage.getItem("user id"));
@@ -250,7 +260,7 @@ async function createPost(username_content, profile_pic_src, textContent, photo_
             fav.src = "icons/unfavved.ico";
             fav.alt = "unfavved";
             fav_number.textContent = parseInt(fav_number.textContent) - 1;
-            const docRef = doc(db, "testWeb", uid_of_user);
+            const docRef = doc(db, "Post", uid_of_user);
             var docSnap = await getDoc(docRef);
             post = docSnap.data().data.data[index];
             const remove = post.like.indexOf(localStorage.getItem("user id"));

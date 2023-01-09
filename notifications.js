@@ -17,8 +17,8 @@ if (docSnap.exists()) {
             createNotification(profile_pic,new_docSnap.data().UserInfo.userName + " liked your post!")
         }
     }
-    for(var j = 0; j < docSnap.data().following.following.length; j++){
-        const new_uid = String(docSnap.data().following.following[j].uid);
+    for(var j = 0; j < docSnap.data().followers.followers.length; j++){
+        const new_uid = String(docSnap.data().followers.followers[j]);
         const new_docRef = doc(db, "testWeb", new_uid);
         var new_docSnap = await getDoc(new_docRef);
         var profile_pic = (new_docSnap.data().profilePicture != undefined) ? new_docSnap.data().profilePicture : "icons/profile.ico";
@@ -48,4 +48,41 @@ function createNotification(profile_pic_src, context){
     notification.appendChild(text);
 
     document.getElementById('notifications_list').prepend(notification);
+}
+
+document.getElementById("search_button").addEventListener("click", async function(){
+    document.getElementById("users").innerHTML = "";
+    const querySnapshot = await getDocs(collection(db, "testWeb"));
+    querySnapshot.forEach((doc) => {
+        var username_content = doc.data().UserInfo.userName;
+        var profile_pic_src = "icons/profile.ico"
+        if(doc.data().profilePicture != undefined)
+            profile_pic_src = doc.data().profilePicture;
+        if(username_content === document.getElementById("search_key").value){
+            createUser(username_content, profile_pic_src, doc.data().UserInfo.uuid);
+        }
+    });
+})
+
+document.getElementById("search_key").addEventListener("input", function(){
+    document.getElementById("users").innerHTML = "";
+})
+
+function createUser(username_content, profile_pic_src, uid){
+    var user = document.createElement("li");
+    var link = document.createElement("a");
+    var profile_pic = document.createElement("img");
+    var username = document.createElement("text");
+
+    user.style.cssText = "width: 80%; height: 10%; display: block; border: 1px solid black; border-radius: 20px";
+    profile_pic.style.cssText = "border-radius: 50%; width: 30px; height: 30px";
+    username.style.cssText = " width: 30px;height: 25px;font-size: 25px; vertical-align: top; "
+    link.style.cssText = "text-decoration: none; color: black";
+    link.href = "profile.html?uid=" + uid;
+    username.textContent = username_content;
+    profile_pic.src = profile_pic_src;
+    link.appendChild(profile_pic)
+    link.appendChild(username);
+    user.appendChild(link);
+    document.getElementById('users').prepend(user);
 }
